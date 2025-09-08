@@ -80,6 +80,14 @@
                                     <option value="yellow">Yellow</option>
                                 </select>
                             </div>
+                            <div class="mb-3" id="commuterPassSection" style="display: none;">
+                                <label for="commuterPass" class="form-label">Which commuter parking pass do you have?</label>
+                                <select class="form-select" id="commuterPass">
+                                    <option value="" selected disabled>Select your commuter pass</option>
+                                    <option value="east-commuter">East Commuter</option>
+                                    <option value="west-commuter">West Commuter</option>
+                                </select>
+                            </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary btn-lg">Find Parking Spots</button>
                             </div>
@@ -97,6 +105,9 @@
                         <h4 class="card-title mb-3">Orange Parking Map</h4>
                         <img id="parkingImage" src="" alt="Parking Map" class="img-fluid mx-auto" style="max-height: 500px;">
                         <img id="parkingImage2" src="" alt="Parking Map 2" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
+                        <img id="parkingImage3" src="" alt="Parking Map 3" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
+                        <img id="parkingImage4" src="" alt="Parking Map 4" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
+                        <img id="parkingImage5" src="" alt="Parking Map 5" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
                     </div>
                 </div>
             </div>
@@ -139,20 +150,34 @@
 
         document.getElementById('studentType').addEventListener('change', function() {
             const parkingPassSection = document.getElementById('parkingPassSection');
+            const commuterPassSection = document.getElementById('commuterPassSection');
             const imageDisplaySection = document.getElementById('imageDisplaySection');
+            
             if (this.value === 'residential') {
                 parkingPassSection.style.display = 'block';
+                commuterPassSection.style.display = 'none';
+            } else if (this.value === 'commuter') {
+                commuterPassSection.style.display = 'block';
+                parkingPassSection.style.display = 'none';
             } else {
                 parkingPassSection.style.display = 'none';
+                commuterPassSection.style.display = 'none';
                 imageDisplaySection.style.display = 'none';
-                // Reset parking pass selection when hidden
+                // Reset selections when hidden
                 document.getElementById('parkingPass').selectedIndex = 0;
+                document.getElementById('commuterPass').selectedIndex = 0;
             }
         });
 
         document.getElementById('parkingPass').addEventListener('change', function() {
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             // Hide image when parking pass changes
+            imageDisplaySection.style.display = 'none';
+        });
+
+        document.getElementById('commuterPass').addEventListener('change', function() {
+            const imageDisplaySection = document.getElementById('imageDisplaySection');
+            // Hide image when commuter pass changes
             imageDisplaySection.style.display = 'none';
         });
 
@@ -164,13 +189,20 @@
             const userType = document.getElementById('userType').value;
             const studentType = document.getElementById('studentType').value;
             const parkingPass = document.getElementById('parkingPass').value;
+            const commuterPass = document.getElementById('commuterPass').value;
             
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             const parkingImage = document.getElementById('parkingImage');
             const parkingImage2 = document.getElementById('parkingImage2');
+            const parkingImage3 = document.getElementById('parkingImage3');
+            const parkingImage4 = document.getElementById('parkingImage4');
+            const parkingImage5 = document.getElementById('parkingImage5');
             
-            // Hide second image by default
+            // Hide all additional images by default
             parkingImage2.style.display = 'none';
+            parkingImage3.style.display = 'none';
+            parkingImage4.style.display = 'none';
+            parkingImage5.style.display = 'none';
             
             // Show parking image based on selected pass
             if (parkingPass === 'orange') {
@@ -190,6 +222,22 @@
                 parkingImage2.src = '../Images/Yellow Parking2.png';
                 parkingImage2.style.display = 'block';
                 document.querySelector('#imageDisplaySection h4').textContent = 'Yellow Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (commuterPass === 'east-commuter') {
+                parkingImage.src = '../Images/East Commuter.png';
+                parkingImage2.src = '../Images/East Commuter2.png';
+                parkingImage3.src = '../Images/East Commuter3.png';
+                parkingImage4.src = '../Images/East Commuter4.png';
+                parkingImage5.src = '../Images/East Commuter5.png';
+                parkingImage2.style.display = 'block';
+                parkingImage3.style.display = 'block';
+                parkingImage4.style.display = 'block';
+                parkingImage5.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'East Commuter Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (commuterPass === 'west-commuter') {
+                parkingImage.src = '../Images/West Commuter.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'West Commuter Parking Map';
                 imageDisplaySection.style.display = 'block';
             } else {
                 imageDisplaySection.style.display = 'none';
