@@ -96,6 +96,7 @@
                     <div class="card-body text-center d-flex flex-column align-items-center">
                         <h4 class="card-title mb-3">Orange Parking Map</h4>
                         <img id="parkingImage" src="" alt="Parking Map" class="img-fluid mx-auto" style="max-height: 500px;">
+                        <img id="parkingImage2" src="" alt="Parking Map 2" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
                     </div>
                 </div>
             </div>
@@ -166,10 +167,29 @@
             
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             const parkingImage = document.getElementById('parkingImage');
+            const parkingImage2 = document.getElementById('parkingImage2');
             
-            // Only show Orange parking image if Orange pass is selected
+            // Hide second image by default
+            parkingImage2.style.display = 'none';
+            
+            // Show parking image based on selected pass
             if (parkingPass === 'orange') {
                 parkingImage.src = '../Images/Orange Parking.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Orange Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'silver') {
+                parkingImage.src = '../Images/Silver Parking.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Silver Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'tan') {
+                parkingImage.src = '../Images/Tan Parking.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Tan Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'yellow') {
+                parkingImage.src = '../Images/Yellow Parking1.png';
+                parkingImage2.src = '../Images/Yellow Parking2.png';
+                parkingImage2.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Yellow Parking Map';
                 imageDisplaySection.style.display = 'block';
             } else {
                 imageDisplaySection.style.display = 'none';
