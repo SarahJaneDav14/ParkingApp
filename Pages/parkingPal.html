@@ -11,9 +11,10 @@
     <nav class="navbar bg-mPurple">
         <div class="container-fluid">
             <div class="navbar-nav mx-auto">
-                <h1 id="header" class="navbar-brand text-white mb-0 fw-bold">
-                    <a href="../index.html" class="text-white text-decoration-none">Parking Pal</a>
-                </h1>
+                <a href="../index.html" class="navbar-brand text-white text-decoration-none d-flex align-items-center">
+                    <img src="../Images/ParkPalLogo.png" alt="Parking Pal Logo" height="40" class="me-2">
+                    <h1 id="header" class="mb-0 fw-bold">Parking Pal</h1>
+                </a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#Menu" aria-controls="Menu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -36,8 +37,144 @@
 
     <div class="container mt-4">
         <h1>Parking Pal</h1>
+        
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8">
+                <div class="card shadow purple-border">
+                    <div class="card-body">
+                        <h3 class="card-title text-center mb-4">Find Parking Near Your Destination</h3>
+                        <form>
+                            <div class="mb-3">
+                                <label for="destination" class="form-label">Where do you want to go?</label>
+                                <select class="form-select" id="destination">
+                                    <option value="" selected disabled>Select a university</option>
+                                    <option value="ua-tuscaloosa">University of Alabama - Tuscaloosa</option>
+                                    <option value="ua-birmingham">University of Alabama - Birmingham</option>
+                                    <option value="ua-huntsville">University of Alabama - Huntsville</option>
+                                    <option value="auburn">Auburn</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="userTypeSection" style="display: none;">
+                                <label for="userType" class="form-label">Are you a student or faculty/staff?</label>
+                                <select class="form-select" id="userType">
+                                    <option value="" selected disabled>Select your status</option>
+                                    <option value="student">Student</option>
+                                    <option value="faculty-staff">Faculty/Staff</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="studentTypeSection" style="display: none;">
+                                <label for="studentType" class="form-label">Are you a commuter or residential student?</label>
+                                <select class="form-select" id="studentType">
+                                    <option value="" selected disabled>Select your student type</option>
+                                    <option value="commuter">Commuter</option>
+                                    <option value="residential">Residential</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="parkingPassSection" style="display: none;">
+                                <label for="parkingPass" class="form-label">Which parking pass do you have?</label>
+                                <select class="form-select" id="parkingPass">
+                                    <option value="" selected disabled>Select your parking pass</option>
+                                    <option value="orange">Orange</option>
+                                    <option value="silver">Silver</option>
+                                    <option value="tan">Tan</option>
+                                    <option value="yellow">Yellow</option>
+                                </select>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Find Parking Spots</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Image display section -->
+        <div class="row justify-content-center mt-4" id="imageDisplaySection" style="display: none;">
+            <div class="col-md-8">
+                <div class="card shadow purple-border">
+                    <div class="card-body text-center d-flex flex-column align-items-center">
+                        <h4 class="card-title mb-3">Orange Parking Map</h4>
+                        <img id="parkingImage" src="" alt="Parking Map" class="img-fluid mx-auto" style="max-height: 500px;">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    
+    <script>
+        document.getElementById('destination').addEventListener('change', function() {
+            const userTypeSection = document.getElementById('userTypeSection');
+            const studentTypeSection = document.getElementById('studentTypeSection');
+            const parkingPassSection = document.getElementById('parkingPassSection');
+            if (this.value === 'ua-tuscaloosa') {
+                userTypeSection.style.display = 'block';
+            } else {
+                userTypeSection.style.display = 'none';
+                studentTypeSection.style.display = 'none';
+                parkingPassSection.style.display = 'none';
+                // Reset selections when hidden
+                document.getElementById('userType').selectedIndex = 0;
+                document.getElementById('studentType').selectedIndex = 0;
+                document.getElementById('parkingPass').selectedIndex = 0;
+            }
+        });
+
+        document.getElementById('userType').addEventListener('change', function() {
+            const studentTypeSection = document.getElementById('studentTypeSection');
+            const parkingPassSection = document.getElementById('parkingPassSection');
+            if (this.value === 'student') {
+                studentTypeSection.style.display = 'block';
+            } else {
+                studentTypeSection.style.display = 'none';
+                parkingPassSection.style.display = 'none';
+                // Reset selections when hidden
+                document.getElementById('studentType').selectedIndex = 0;
+                document.getElementById('parkingPass').selectedIndex = 0;
+            }
+        });
+
+        document.getElementById('studentType').addEventListener('change', function() {
+            const parkingPassSection = document.getElementById('parkingPassSection');
+            const imageDisplaySection = document.getElementById('imageDisplaySection');
+            if (this.value === 'residential') {
+                parkingPassSection.style.display = 'block';
+            } else {
+                parkingPassSection.style.display = 'none';
+                imageDisplaySection.style.display = 'none';
+                // Reset parking pass selection when hidden
+                document.getElementById('parkingPass').selectedIndex = 0;
+            }
+        });
+
+        document.getElementById('parkingPass').addEventListener('change', function() {
+            const imageDisplaySection = document.getElementById('imageDisplaySection');
+            // Hide image when parking pass changes
+            imageDisplaySection.style.display = 'none';
+        });
+
+        // Handle form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
+            
+            const destination = document.getElementById('destination').value;
+            const userType = document.getElementById('userType').value;
+            const studentType = document.getElementById('studentType').value;
+            const parkingPass = document.getElementById('parkingPass').value;
+            
+            const imageDisplaySection = document.getElementById('imageDisplaySection');
+            const parkingImage = document.getElementById('parkingImage');
+            
+            // Only show Orange parking image if Orange pass is selected
+            if (parkingPass === 'orange') {
+                parkingImage.src = '../Images/Orange Parking.png';
+                imageDisplaySection.style.display = 'block';
+            } else {
+                imageDisplaySection.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
