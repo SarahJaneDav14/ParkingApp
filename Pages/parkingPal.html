@@ -88,6 +88,12 @@
                                     <option value="west-commuter">West Commuter</option>
                                 </select>
                             </div>
+                            <div class="mb-3" id="facultyStaffSection" style="display: none;">
+                                <label for="facultyStaffPass" class="form-label">Faculty/Staff Parking</label>
+                                <select class="form-select" id="facultyStaffPass">
+                                    <option value="fs-parking" selected>FS Parking</option>
+                                </select>
+                            </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary btn-lg">Find Parking Spots</button>
                             </div>
@@ -108,6 +114,7 @@
                         <img id="parkingImage3" src="" alt="Parking Map 3" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
                         <img id="parkingImage4" src="" alt="Parking Map 4" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
                         <img id="parkingImage5" src="" alt="Parking Map 5" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
+                        <img id="parkingImage6" src="" alt="Parking Map 6" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
                     </div>
                 </div>
             </div>
@@ -137,35 +144,55 @@
         document.getElementById('userType').addEventListener('change', function() {
             const studentTypeSection = document.getElementById('studentTypeSection');
             const parkingPassSection = document.getElementById('parkingPassSection');
+            const commuterPassSection = document.getElementById('commuterPassSection');
+            const facultyStaffSection = document.getElementById('facultyStaffSection');
+            const imageDisplaySection = document.getElementById('imageDisplaySection');
+            
             if (this.value === 'student') {
                 studentTypeSection.style.display = 'block';
+                facultyStaffSection.style.display = 'none';
+            } else if (this.value === 'faculty-staff') {
+                facultyStaffSection.style.display = 'block';
+                studentTypeSection.style.display = 'none';
+                parkingPassSection.style.display = 'none';
+                commuterPassSection.style.display = 'none';
             } else {
                 studentTypeSection.style.display = 'none';
                 parkingPassSection.style.display = 'none';
+                commuterPassSection.style.display = 'none';
+                facultyStaffSection.style.display = 'none';
+                imageDisplaySection.style.display = 'none';
                 // Reset selections when hidden
                 document.getElementById('studentType').selectedIndex = 0;
                 document.getElementById('parkingPass').selectedIndex = 0;
+                document.getElementById('commuterPass').selectedIndex = 0;
+                document.getElementById('facultyStaffPass').selectedIndex = 0;
             }
         });
 
         document.getElementById('studentType').addEventListener('change', function() {
             const parkingPassSection = document.getElementById('parkingPassSection');
             const commuterPassSection = document.getElementById('commuterPassSection');
+            const facultyStaffSection = document.getElementById('facultyStaffSection');
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             
             if (this.value === 'residential') {
                 parkingPassSection.style.display = 'block';
                 commuterPassSection.style.display = 'none';
+                facultyStaffSection.style.display = 'none';
             } else if (this.value === 'commuter') {
                 commuterPassSection.style.display = 'block';
                 parkingPassSection.style.display = 'none';
+                facultyStaffSection.style.display = 'none';
             } else {
                 parkingPassSection.style.display = 'none';
                 commuterPassSection.style.display = 'none';
+                facultyStaffSection.style.display = 'none';
                 imageDisplaySection.style.display = 'none';
                 // Reset selections when hidden
                 document.getElementById('parkingPass').selectedIndex = 0;
                 document.getElementById('commuterPass').selectedIndex = 0;
+                document.getElementById('facultyStaffPass').selectedIndex = 0;
             }
         });
 
@@ -181,6 +208,12 @@
             imageDisplaySection.style.display = 'none';
         });
 
+        document.getElementById('facultyStaffPass').addEventListener('change', function() {
+            const imageDisplaySection = document.getElementById('imageDisplaySection');
+            // Hide image when faculty/staff pass changes
+            imageDisplaySection.style.display = 'none';
+        });
+
         // Handle form submission
         document.querySelector('form').addEventListener('submit', function(e) {
             e.preventDefault(); // Prevent default form submission
@@ -190,6 +223,7 @@
             const studentType = document.getElementById('studentType').value;
             const parkingPass = document.getElementById('parkingPass').value;
             const commuterPass = document.getElementById('commuterPass').value;
+            const facultyStaffPass = document.getElementById('facultyStaffPass').value;
             
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             const parkingImage = document.getElementById('parkingImage');
@@ -197,12 +231,14 @@
             const parkingImage3 = document.getElementById('parkingImage3');
             const parkingImage4 = document.getElementById('parkingImage4');
             const parkingImage5 = document.getElementById('parkingImage5');
+            const parkingImage6 = document.getElementById('parkingImage6');
             
             // Hide all additional images by default
             parkingImage2.style.display = 'none';
             parkingImage3.style.display = 'none';
             parkingImage4.style.display = 'none';
             parkingImage5.style.display = 'none';
+            parkingImage6.style.display = 'none';
             
             // Show parking image based on selected pass
             if (parkingPass === 'orange') {
@@ -238,6 +274,20 @@
             } else if (commuterPass === 'west-commuter') {
                 parkingImage.src = '../Images/West Commuter.png';
                 document.querySelector('#imageDisplaySection h4').textContent = 'West Commuter Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (facultyStaffPass === 'fs-parking') {
+                parkingImage.src = '../Images/FS Parking.png';
+                parkingImage2.src = '../Images/FS Parking2.png';
+                parkingImage3.src = '../Images/FS Parking3.png';
+                parkingImage4.src = '../Images/FS Parking4.png';
+                parkingImage5.src = '../Images/FS Parking5.png';
+                parkingImage6.src = '../Images/FS Parking6.png';
+                parkingImage2.style.display = 'block';
+                parkingImage3.style.display = 'block';
+                parkingImage4.style.display = 'block';
+                parkingImage5.style.display = 'block';
+                parkingImage6.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Faculty/Staff Parking Map';
                 imageDisplaySection.style.display = 'block';
             } else {
                 imageDisplaySection.style.display = 'none';
