@@ -1,0 +1,160 @@
+/* Auburn University Parking App - Custom Styles */
+
+/* Auburn University Brand Colors */
+:root {
+  --auburn-orange: #dd550c;
+  --auburn-navy: #0c2340;
+  --auburn-gold: #ffd700;
+  --auburn-gray: #6c757d;
+}
+
+/* Custom primary color override for Auburn branding */
+.navbar-dark.bg-primary {
+  background-color: var(--auburn-navy) !important;
+}
+
+.btn-primary {
+  background-color: var(--auburn-orange);
+  border-color: var(--auburn-orange);
+}
+
+.btn-primary:hover {
+  background-color: #c44a0a;
+  border-color: #c44a0a;
+}
+
+.btn-outline-primary {
+  color: var(--auburn-orange);
+  border-color: var(--auburn-orange);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--auburn-orange);
+  border-color: var(--auburn-orange);
+}
+
+.text-primary {
+  color: var(--auburn-orange) !important;
+}
+
+/* Smooth scrolling for navigation links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom card hover effects */
+.card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Custom badge styles for availability */
+.badge {
+  font-size: 0.8rem;
+  padding: 0.5em 0.75em;
+}
+
+/* Hero section enhancements */
+.hero-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* Stats section styling */
+.stats-icon {
+  transition: transform 0.3s ease;
+}
+
+.stats-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Table enhancements */
+.table th {
+  background-color: var(--auburn-navy);
+  color: white;
+  border: none;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(220, 53, 69, 0.05);
+}
+
+/* Footer styling */
+footer {
+  background-color: var(--auburn-navy) !important;
+}
+
+/* Loading animation for dynamic content */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid var(--auburn-orange);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 768px) {
+  .display-4 {
+    font-size: 2.5rem;
+  }
+  
+  .lead {
+    font-size: 1.1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+}
+
+/* Custom focus states for accessibility */
+.btn:focus,
+.nav-link:focus {
+  box-shadow: 0 0 0 0.2rem rgba(221, 85, 12, 0.25);
+}
+
+/* Parking lot status indicators */
+.parking-status-available {
+  color: #28a745;
+}
+
+.parking-status-limited {
+  color: #ffc107;
+}
+
+.parking-status-full {
+  color: #dc3545;
+}
+
+/* Custom spacing utilities */
+.section-padding {
+  padding: 4rem 0;
+}
+
+/* Auburn University specific styling */
+.auburn-brand {
+  font-family: 'Georgia', serif;
+  font-weight: bold;
+}
+
+/* Interactive elements */
+.interactive-element {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.interactive-element:hover {
+  opacity: 0.8;
+}
