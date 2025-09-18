@@ -115,6 +115,12 @@
                         <img id="parkingImage4" src="" alt="Parking Map 4" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
                         <img id="parkingImage5" src="" alt="Parking Map 5" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
                         <img id="parkingImage6" src="" alt="Parking Map 6" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
+                        <img id="parkingImage7" src="" alt="Parking Map 7" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
+                        <img id="parkingImage8" src="" alt="Parking Map 8" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
+                        <img id="parkingImage9" src="" alt="Parking Map 9" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
+                        <p id="imageSource" class="mt-2" style="display: none;">
+                            Source: <a href="https://www.uah.edu/images/map/050922/UAH-parking-map-050922.pdf" target="_blank" rel="noopener">UAH Parking Map (PDF)</a>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -130,6 +136,15 @@
             const parkingPassSection = document.getElementById('parkingPassSection');
             if (this.value === 'ua-tuscaloosa') {
                 userTypeSection.style.display = 'block';
+            } else if (this.value === 'ua-huntsville') {
+                userTypeSection.style.display = 'block';
+                // For UAH, ensure downstream dropdowns are hidden/reset by default
+                studentTypeSection.style.display = 'none';
+                parkingPassSection.style.display = 'none';
+                document.getElementById('userType').selectedIndex = 0;
+                document.getElementById('studentType').selectedIndex = 0;
+                document.getElementById('parkingPass').selectedIndex = 0;
+                document.getElementById('commuterPass').selectedIndex = 0;
             } else {
                 userTypeSection.style.display = 'none';
                 studentTypeSection.style.display = 'none';
@@ -142,6 +157,7 @@
         });
 
         document.getElementById('userType').addEventListener('change', function() {
+            const destination = document.getElementById('destination').value;
             const studentTypeSection = document.getElementById('studentTypeSection');
             const parkingPassSection = document.getElementById('parkingPassSection');
             const commuterPassSection = document.getElementById('commuterPassSection');
@@ -151,6 +167,11 @@
             if (this.value === 'student') {
                 studentTypeSection.style.display = 'block';
                 facultyStaffSection.style.display = 'none';
+                // For UAH, do not show any dropdowns after commuter/residential
+                if (destination === 'ua-huntsville') {
+                    parkingPassSection.style.display = 'none';
+                    commuterPassSection.style.display = 'none';
+                }
             } else if (this.value === 'faculty-staff') {
                 facultyStaffSection.style.display = 'block';
                 studentTypeSection.style.display = 'none';
@@ -171,11 +192,23 @@
         });
 
         document.getElementById('studentType').addEventListener('change', function() {
+            const destination = document.getElementById('destination').value;
             const parkingPassSection = document.getElementById('parkingPassSection');
             const commuterPassSection = document.getElementById('commuterPassSection');
             const facultyStaffSection = document.getElementById('facultyStaffSection');
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             
+            // For UAH, stop here: do not show further dropdowns after commuter/residential
+            if (destination === 'ua-huntsville') {
+                parkingPassSection.style.display = 'none';
+                commuterPassSection.style.display = 'none';
+                facultyStaffSection.style.display = 'none';
+                imageDisplaySection.style.display = 'none';
+                document.getElementById('parkingPass').selectedIndex = 0;
+                document.getElementById('commuterPass').selectedIndex = 0;
+                return;
+            }
+
             if (this.value === 'residential') {
                 parkingPassSection.style.display = 'block';
                 commuterPassSection.style.display = 'none';
@@ -232,6 +265,10 @@
             const parkingImage4 = document.getElementById('parkingImage4');
             const parkingImage5 = document.getElementById('parkingImage5');
             const parkingImage6 = document.getElementById('parkingImage6');
+            const parkingImage7 = document.getElementById('parkingImage7');
+            const parkingImage8 = document.getElementById('parkingImage8');
+            const parkingImage9 = document.getElementById('parkingImage9');
+            const imageSource = document.getElementById('imageSource');
             
             // Hide all additional images by default
             parkingImage2.style.display = 'none';
@@ -239,9 +276,33 @@
             parkingImage4.style.display = 'none';
             parkingImage5.style.display = 'none';
             parkingImage6.style.display = 'none';
+            parkingImage7.style.display = 'none';
+            parkingImage8.style.display = 'none';
+            parkingImage9.style.display = 'none';
+            imageSource.style.display = 'none';
             
+            // UAH-specific: show residential images without using pass selection
+            if (destination === 'ua-huntsville' && userType === 'student' && studentType === 'residential') {
+                parkingImage.src = '../Images/ParkingKey.jpg';
+                parkingImage2.src = '../Images/ResParking 1.jpg';
+                parkingImage3.src = '../Images/ResParking2.jpg';
+                parkingImage2.style.display = 'block';
+                parkingImage3.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'UAH Residential Parking';
+                imageDisplaySection.style.display = 'block';
+                imageSource.style.display = 'block';
+            // UAH-specific: show commuter images without using pass selection
+            } else if (destination === 'ua-huntsville' && userType === 'student' && studentType === 'commuter') {
+                parkingImage.src = '../Images/ParkingKey.jpg';
+                parkingImage2.src = '../Images/ComParking 1.jpg';
+                parkingImage3.src = '../Images/ComParking 2.jpg';
+                parkingImage2.style.display = 'block';
+                parkingImage3.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'UAH Commuter Parking';
+                imageDisplaySection.style.display = 'block';
+                imageSource.style.display = 'block';
             // Show parking image based on selected pass
-            if (parkingPass === 'orange') {
+            } else if (parkingPass === 'orange') {
                 parkingImage.src = '../Images/Orange Parking.png';
                 document.querySelector('#imageDisplaySection h4').textContent = 'Orange Parking Map';
                 imageDisplaySection.style.display = 'block';
@@ -275,6 +336,15 @@
                 parkingImage.src = '../Images/West Commuter.png';
                 document.querySelector('#imageDisplaySection h4').textContent = 'West Commuter Parking Map';
                 imageDisplaySection.style.display = 'block';
+            } else if (destination === 'ua-huntsville' && userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
+                parkingImage.src = '../Images/ParkingKey.jpg';
+                parkingImage2.src = '../Images/FacParking 1.jpg';
+                parkingImage3.src = '../Images/FacParking 2.jpg';
+                parkingImage2.style.display = 'block';
+                parkingImage3.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'UAH Faculty/Staff Parking';
+                imageDisplaySection.style.display = 'block';
+                imageSource.style.display = 'block';
             } else if (facultyStaffPass === 'fs-parking') {
                 parkingImage.src = '../Images/FS Parking.png';
                 parkingImage2.src = '../Images/FS Parking2.png';
