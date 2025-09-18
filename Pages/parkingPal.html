@@ -294,8 +294,8 @@
                 parkingImage4.style.display = 'block';
                 document.querySelector('#imageDisplaySection h4').textContent = 'Zone D, E, F, G Parking Map (FallSpring)';
                 imageDisplaySection.style.display = 'block';
-            } else if (commuterPass === 'Fall (only) – Zone D, E, F, G') {
-                console.log('Matched: Fall (only) – Zone D, E, F, G');
+            } else if (commuterPass && commuterPass.includes('Zone D, E, F, G') && commuterPass.toLowerCase().includes('fall')) {
+                console.log('Matched (flex): Fall (only) – Zone D, E, F, G');
                 parkingImage.src = '../Images/Fall (only) – Zone D, E, F, G #1.jpeg';
                 parkingImage2.src = '../Images/Fall (only) – Zone D, E, F, G #2.jpeg';
                 parkingImage3.src = '../Images/Fall (only) – Zone D, E, F, G #3.jpeg';
@@ -316,8 +316,13 @@
                 document.querySelector('#imageDisplaySection h4').textContent = 'Commuter Zone C Parking Map (Fall Only)';
                 imageDisplaySection.style.display = 'block';
             } else if (facultyStaffPass === 'fs-parking') {
-                // Note: Faculty/Staff images not found in Images folder, using placeholder
-                parkingImage.src = '../Images/FallSpring – Zone A or Zone H #1.jpeg';
+                // Faculty/Staff parking image
+                parkingImage.src = '../Images/FS Parking.png';
+                parkingImage2.style.display = 'none';
+                parkingImage3.style.display = 'none';
+                parkingImage4.style.display = 'none';
+                parkingImage5.style.display = 'none';
+                parkingImage6.style.display = 'none';
                 document.querySelector('#imageDisplaySection h4').textContent = 'Faculty/Staff Parking Map';
                 imageDisplaySection.style.display = 'block';
             } else {
