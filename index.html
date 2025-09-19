@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parking Pal</title>
+    <link rel="icon" type="image/png" href="./Images/ParkPalLogo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel = "stylesheet" href="./Styles/index.css">
 </head>
@@ -11,7 +12,10 @@
     <nav class ="navbar bg-mPurple">
         <div class = "container-fluid">
             <div class="navbar-nav mx-auto">
-                <h1 id="header" class="navbar-brand text-white mb-0 fw-bold" >Parking Pal</h1>
+                <a href="index.html" class="navbar-brand text-white text-decoration-none d-flex align-items-center">
+                    <img src="./Images/ParkPalLogo.png" alt="Parking Pal Logo" height="40" class="me-2">
+                    <h1 id="header" class="mb-0 fw-bold">Parking Pal</h1>
+                </a>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#Menu" aria-controls="Menu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -32,6 +36,28 @@
         </div>
     </nav>
 
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 shadow purple-border">
+                    <div class="card-body text-center">
+                        <h3 class="card-title mb-3">Parking Pal</h3>
+                        <p class="card-text">Find and reserve parking spots with ease. Our smart parking system helps you locate available spaces in real-time.</p>
+                        <a href="./Pages/parkingPal.html" class="btn btn-primary">Go to Parking Pal</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 shadow purple-border">
+                    <div class="card-body text-center">
+                        <h3 class="card-title mb-3">Spot Swap</h3>
+                        <p class="card-text">Exchange parking spots with other users. Trade your current spot for a better location or time slot.</p>
+                        <a href="./Pages/spotSwap.html" class="btn btn-primary">Go to Spot Swap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
