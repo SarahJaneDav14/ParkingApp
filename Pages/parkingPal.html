@@ -96,6 +96,12 @@
                                     <option value="Fall (only) – Zone D, E, F, G">Fall (only) Zone D, E, F, G</option>
                                     <option value="FallSpring – Zone C">Fall/Spring Zone C</option>
                                     <option value="Fall (only) – Zone C">Fall (only) Zone C</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="tuscaloosaCommuterPassSection" style="display: none;">
+                                <label for="tuscaloosaCommuterPass" class="form-label">Which commuter parking pass do you have?</label>
+                                <select class="form-select" id="tuscaloosaCommuterPass">
+                                    <option value="" selected disabled>Select your commuter pass</option>
                                     <!-- UA Tuscaloosa Commuter options -->
                                     <option value="east-commuter">East Commuter</option>
                                     <option value="west-commuter">West Commuter</option>
@@ -168,6 +174,7 @@
             const studentTypeSection = document.getElementById('studentTypeSection');
             const parkingPassSection = document.getElementById('parkingPassSection');
             const commuterPassSection = document.getElementById('commuterPassSection');
+            const tuscaloosaCommuterPassSection = document.getElementById('tuscaloosaCommuterPassSection');
             const facultyStaffSection = document.getElementById('facultyStaffSection');
             const auburnFacultyStaffSection = document.getElementById('auburnFacultyStaffSection');
             const auburnStudentPassSection = document.getElementById('auburnStudentPassSection');
@@ -177,6 +184,7 @@
             studentTypeSection.style.display = 'none';
             parkingPassSection.style.display = 'none';
             commuterPassSection.style.display = 'none';
+            tuscaloosaCommuterPassSection.style.display = 'none';
             facultyStaffSection.style.display = 'none';
             auburnFacultyStaffSection.style.display = 'none';
             auburnStudentPassSection.style.display = 'none';
@@ -187,6 +195,7 @@
             document.getElementById('studentType').selectedIndex = 0;
             document.getElementById('parkingPass').selectedIndex = 0;
             document.getElementById('commuterPass').selectedIndex = 0;
+            document.getElementById('tuscaloosaCommuterPass').selectedIndex = 0;
             document.getElementById('facultyStaffPass').selectedIndex = 0;
             document.getElementById('auburnFacultyStaffPass').selectedIndex = 0;
             document.getElementById('auburnStudentPass').selectedIndex = 0;
@@ -203,6 +212,7 @@
             const studentTypeSection = document.getElementById('studentTypeSection');
             const parkingPassSection = document.getElementById('parkingPassSection');
             const commuterPassSection = document.getElementById('commuterPassSection');
+            const tuscaloosaCommuterPassSection = document.getElementById('tuscaloosaCommuterPassSection');
             const facultyStaffSection = document.getElementById('facultyStaffSection');
             const auburnFacultyStaffSection = document.getElementById('auburnFacultyStaffSection');
             const auburnStudentPassSection = document.getElementById('auburnStudentPassSection');
@@ -212,6 +222,7 @@
             studentTypeSection.style.display = 'none';
             parkingPassSection.style.display = 'none';
             commuterPassSection.style.display = 'none';
+            tuscaloosaCommuterPassSection.style.display = 'none';
             facultyStaffSection.style.display = 'none';
             auburnFacultyStaffSection.style.display = 'none';
             auburnStudentPassSection.style.display = 'none';
@@ -221,6 +232,7 @@
             document.getElementById('studentType').selectedIndex = 0;
             document.getElementById('parkingPass').selectedIndex = 0;
             document.getElementById('commuterPass').selectedIndex = 0;
+            document.getElementById('tuscaloosaCommuterPass').selectedIndex = 0;
             document.getElementById('facultyStaffPass').selectedIndex = 0;
             document.getElementById('auburnFacultyStaffPass').selectedIndex = 0;
             document.getElementById('auburnStudentPass').selectedIndex = 0;
@@ -251,18 +263,21 @@
             const destination = document.getElementById('destination').value;
             const parkingPassSection = document.getElementById('parkingPassSection');
             const commuterPassSection = document.getElementById('commuterPassSection');
+            const tuscaloosaCommuterPassSection = document.getElementById('tuscaloosaCommuterPassSection');
             const facultyStaffSection = document.getElementById('facultyStaffSection');
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             
             // Hide all sections first
             parkingPassSection.style.display = 'none';
             commuterPassSection.style.display = 'none';
+            tuscaloosaCommuterPassSection.style.display = 'none';
             facultyStaffSection.style.display = 'none';
             imageDisplaySection.style.display = 'none';
             
             // Reset selections
             document.getElementById('parkingPass').selectedIndex = 0;
             document.getElementById('commuterPass').selectedIndex = 0;
+            document.getElementById('tuscaloosaCommuterPass').selectedIndex = 0;
             document.getElementById('facultyStaffPass').selectedIndex = 0;
             
             if (this.value === 'residential') {
@@ -282,7 +297,7 @@
                     commuterPassSection.style.display = 'block';
                 } else if (destination === 'ua-tuscaloosa') {
                     // UA Tuscaloosa commuter students get commuter-specific parking
-                    commuterPassSection.style.display = 'block';
+                    tuscaloosaCommuterPassSection.style.display = 'block';
                 } else if (destination === 'ua-huntsville') {
                     // UAH commuter students don't need further selection - handled in form submission
                     // No additional dropdown needed
@@ -299,6 +314,12 @@
         document.getElementById('commuterPass').addEventListener('change', function() {
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             // Hide image when commuter pass changes
+            imageDisplaySection.style.display = 'none';
+        });
+
+        document.getElementById('tuscaloosaCommuterPass').addEventListener('change', function() {
+            const imageDisplaySection = document.getElementById('imageDisplaySection');
+            // Hide image when Tuscaloosa commuter pass changes
             imageDisplaySection.style.display = 'none';
         });
 
@@ -329,6 +350,7 @@
             const studentType = document.getElementById('studentType').value;
             const parkingPass = document.getElementById('parkingPass').value;
             const commuterPass = document.getElementById('commuterPass').value;
+            const tuscaloosaCommuterPass = document.getElementById('tuscaloosaCommuterPass').value;
             const facultyStaffPass = document.getElementById('facultyStaffPass').value;
             const auburnFacultyStaffPass = document.getElementById('auburnFacultyStaffPass').value;
             const auburnStudentPass = document.getElementById('auburnStudentPass').value;
@@ -435,7 +457,7 @@
                     parkingImage2.style.display = 'block';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Yellow Parking Map';
                     imageDisplaySection.style.display = 'block';
-                } else if (commuterPass === 'east-commuter') {
+                } else if (tuscaloosaCommuterPass === 'east-commuter') {
                     parkingImage.src = '../Images/East Commuter.png';
                     parkingImage2.src = '../Images/East Commuter2.png';
                     parkingImage3.src = '../Images/East Commuter3.png';
@@ -447,7 +469,7 @@
                     parkingImage5.style.display = 'block';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa East Commuter Parking Map';
                     imageDisplaySection.style.display = 'block';
-                } else if (commuterPass === 'west-commuter') {
+                } else if (tuscaloosaCommuterPass === 'west-commuter') {
                     parkingImage.src = '../Images/West Commuter.png';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa West Commuter Parking Map';
                     imageDisplaySection.style.display = 'block';
@@ -536,22 +558,6 @@
                 parkingImage2.src = '../Images/Yellow Parking2.png';
                 parkingImage2.style.display = 'block';
                 document.querySelector('#imageDisplaySection h4').textContent = 'Yellow Parking Map';
-                imageDisplaySection.style.display = 'block';
-            } else if (commuterPass === 'east-commuter') {
-                parkingImage.src = '../Images/East Commuter.png';
-                parkingImage2.src = '../Images/East Commuter2.png';
-                parkingImage3.src = '../Images/East Commuter3.png';
-                parkingImage4.src = '../Images/East Commuter4.png';
-                parkingImage5.src = '../Images/East Commuter5.png';
-                parkingImage2.style.display = 'block';
-                parkingImage3.style.display = 'block';
-                parkingImage4.style.display = 'block';
-                parkingImage5.style.display = 'block';
-                document.querySelector('#imageDisplaySection h4').textContent = 'East Commuter Parking Map';
-                imageDisplaySection.style.display = 'block';
-            } else if (commuterPass === 'west-commuter') {
-                parkingImage.src = '../Images/West Commuter.png';
-                document.querySelector('#imageDisplaySection h4').textContent = 'West Commuter Parking Map';
                 imageDisplaySection.style.display = 'block';
             } else if (destination === 'ua-huntsville' && userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
                 parkingImage.src = '../Images/ParkingKey.jpg';
