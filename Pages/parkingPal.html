@@ -356,9 +356,8 @@
             parkingImage9.style.display = 'none';
             imageSource.style.display = 'none';
             
-            // Show parking image based on school and selected pass
+            // UAB-specific parking logic
             if (destination === 'ua-birmingham') {
-                // UAB-specific parking logic
                 if (parkingPass === 'FallSpring – Zone A or Zone H') {
                     parkingImage.src = '../Images/FallSpring – Zone A or Zone H1.jpeg';
                     parkingImage2.src = '../Images/FallSpring – Zone A or Zone H2.jpeg';
@@ -516,6 +515,63 @@
 
                     imageDisplaySection.style.display = 'block';
                 }
+            } else if (parkingPass === 'orange') {
+                parkingImage.src = '../Images/Orange Parking.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Orange Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'silver') {
+                parkingImage.src = '../Images/Silver Parking.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Silver Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'tan') {
+                parkingImage.src = '../Images/Tan Parking.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Tan Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'yellow') {
+                parkingImage.src = '../Images/Yellow Parking1.png';
+                parkingImage2.src = '../Images/Yellow Parking2.png';
+                parkingImage2.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Yellow Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (commuterPass === 'east-commuter') {
+                parkingImage.src = '../Images/East Commuter.png';
+                parkingImage2.src = '../Images/East Commuter2.png';
+                parkingImage3.src = '../Images/East Commuter3.png';
+                parkingImage4.src = '../Images/East Commuter4.png';
+                parkingImage5.src = '../Images/East Commuter5.png';
+                parkingImage2.style.display = 'block';
+                parkingImage3.style.display = 'block';
+                parkingImage4.style.display = 'block';
+                parkingImage5.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'East Commuter Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (commuterPass === 'west-commuter') {
+                parkingImage.src = '../Images/West Commuter.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'West Commuter Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (destination === 'ua-huntsville' && userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
+                parkingImage.src = '../Images/ParkingKey.jpg';
+                parkingImage2.src = '../Images/FacParking 1.jpg';
+                parkingImage3.src = '../Images/FacParking 2.jpg';
+                parkingImage2.style.display = 'block';
+                parkingImage3.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'UAH Faculty/Staff Parking';
+                imageDisplaySection.style.display = 'block';
+                imageSource.style.display = 'block';
+            } else if (facultyStaffPass === 'fs-parking') {
+                parkingImage.src = '../Images/FS Parking.png';
+                parkingImage2.src = '../Images/FS Parking2.png';
+                parkingImage3.src = '../Images/FS Parking3.png';
+                parkingImage4.src = '../Images/FS Parking4.png';
+                parkingImage5.src = '../Images/FS Parking5.png';
+                parkingImage6.src = '../Images/FS Parking6.png';
+                parkingImage2.style.display = 'block';
+                parkingImage3.style.display = 'block';
+                parkingImage4.style.display = 'block';
+                parkingImage5.style.display = 'block';
+                parkingImage6.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Faculty/Staff Parking Map';
+                imageDisplaySection.style.display = 'block';
             } else {
                 imageDisplaySection.style.display = 'none';
             }
