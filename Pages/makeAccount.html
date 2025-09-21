@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make an Account - Parking Pal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="../Styles/index.css">
+</head>
+<body>
+    <nav class="navbar bg-mPurple">
+        <div class="container-fluid">
+            <div class="navbar-nav mx-auto">
+                <a href="../index.html" class="navbar-brand text-white text-decoration-none d-flex align-items-center">
+                    <img src="../Images/ParkPalLogo.png" alt="Parking Pal Logo" height="40" class="me-2">
+                    <h1 id="header" class="mb-0 fw-bold">Parking Pal</h1>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#Menu" aria-controls="Menu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="Menu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./parkingPal.html">Parking Pal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./spotSwap.html">Spot Swap</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./makeAccount.html">Make an Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./meetTheTeam.html">Meet the Team</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="text-center mb-5">Make an Account</h1>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card h-100 purple-border">
+                    <div class="card-header bg-mPurple text-white">
+                        <h3 class="card-title mb-0">Register Your Car</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Create an account to start sharing parking spots!</p>
+                        <form id="registrationForm">
+                            <div class="mb-3">
+                                <label for="accountName" class="form-label">Account Name</label>
+                                <input type="text" class="form-control" id="accountName" placeholder="Enter a unique account name" required>
+                                <div class="invalid-feedback" id="nameError"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="carModel" class="form-label">Car Model</label>
+                                <input type="text" class="form-control" id="carModel" placeholder="e.g., Honda Civic, Toyota Camry" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="carColor" class="form-label">Car Color</label>
+                                <input type="text" class="form-control" id="carColor" placeholder="e.g., Black, White, Silver" required>
+                            </div>
+                            <button type="submit" class="btn bg-mPurple text-white w-100">Create Account</button>
+                        </form>
+                        <div class="alert alert-success mt-3" id="successMessage" style="display: none;">
+                            <strong>Success!</strong> Your account has been created. You can now use this name to give up parking spots.
+                        </div>
+                        <div class="alert alert-danger mt-3" id="errorMessage" style="display: none;">
+                            <strong>Error!</strong> <span id="errorText"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    
+    <script>
+        // Check if account name is unique
+        function isAccountNameUnique(name) {
+            const accounts = JSON.parse(localStorage.getItem('parkingAccounts') || '[]');
+            return !accounts.some(account => account.name.toLowerCase() === name.toLowerCase());
+        }
+
+        // Handle form submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const accountName = document.getElementById('accountName').value.trim();
+            const carModel = document.getElementById('carModel').value.trim();
+            const carColor = document.getElementById('carColor').value.trim();
+            
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            // Validate inputs
+            if (!accountName || !carModel || !carColor) {
+                errorText.textContent = 'Please fill in all fields.';
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            // Check if account name is unique
+            if (!isAccountNameUnique(accountName)) {
+                errorText.textContent = 'Account name already exists. Please choose a different name.';
+                errorMessage.style.display = 'block';
+                document.getElementById('accountName').classList.add('is-invalid');
+                return;
+            }
+            
+            // Create account object
+            const account = {
+                name: accountName,
+                carModel: carModel,
+                carColor: carColor,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Save to localStorage
+            const accounts = JSON.parse(localStorage.getItem('parkingAccounts') || '[]');
+            accounts.push(account);
+            localStorage.setItem('parkingAccounts', JSON.stringify(accounts));
+            
+            // Show success message
+            successMessage.style.display = 'block';
+            document.getElementById('accountName').classList.remove('is-invalid');
+            
+            // Reset form
+            document.getElementById('registrationForm').reset();
+            
+            // Redirect to spotSwap after 2 seconds
+            setTimeout(() => {
+                window.location.href = './spotSwap.html';
+            }, 2000);
+        });
+
+        // Real-time validation for account name
+        document.getElementById('accountName').addEventListener('input', function() {
+            const name = this.value.trim();
+            const nameError = document.getElementById('nameError');
+            
+            if (name && !isAccountNameUnique(name)) {
+                this.classList.add('is-invalid');
+                nameError.textContent = 'This account name is already taken.';
+            } else {
+                this.classList.remove('is-invalid');
+                nameError.textContent = '';
+            }
+        });
+    </script>
+</body>
+</html>

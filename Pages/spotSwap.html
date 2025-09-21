@@ -28,6 +28,9 @@
                         <a class="nav-link text-white" href="./spotSwap.html">Spot Swap</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link text-white" href="./Pages/makeAccount.html">Make an Account</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-white" href="./meetTheTeam.html">Meet the Team</a>
                     </li>
                 </ul>
@@ -36,9 +39,495 @@
     </nav>
 
     <div class="container mt-4">
-        <h1>Spot Swap</h1>
+        <h1 class="text-center mb-5">Spot Swap</h1>
+        
+        <div class="row">
+            <!-- Looking for a Spot Box -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 purple-border">
+                    <div class="card-header bg-mPurple text-white">
+                        <h3 class="card-title mb-0">Looking for a Spot</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Need a parking spot? Let others know you're looking!</p>
+                        <form>
+                            <div class="mb-3">
+                                <label for="lookingCampus" class="form-label">Campus</label>
+                                <select class="form-select" id="lookingCampus" onchange="updateLookingParkingLocations()">
+                                    <option selected>Choose campus...</option>
+                                    <option value="ua-tuscaloosa">University of Alabama - Tuscaloosa</option>
+                                    <option value="ua-birmingham">University of Alabama - Birmingham</option>
+                                    <option value="ua-huntsville">University of Alabama - Huntsville</option>
+                                    <option value="auburn">Auburn</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lookingLocation" class="form-label">Preferred Location</label>
+                                <select class="form-select" id="lookingLocation" disabled>
+                                    <option selected>Select campus first...</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lookingMessage" class="form-label">Message (Optional)</label>
+                                <textarea class="form-control" id="lookingMessage" rows="3" placeholder="Orange Magnolia Parking Deck"></textarea>
+                            </div>
+                            <button type="submit" class="btn bg-mPurple text-white w-100">Post Request</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Giving up a Spot Box -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 purple-border">
+                    <div class="card-header bg-mPurple text-white">
+                        <h3 class="card-title mb-0">Giving up a Spot</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Have a spot to give away? Share it with the community!</p>
+                        <form>
+                            <div class="mb-3">
+                                <label for="givingAccountName" class="form-label">Account Name</label>
+                                <input type="text" class="form-control" id="givingAccountName" placeholder="Enter your account name" required>
+                                <small class="form-text text-muted">Don't have an account? <a href="./makeAccount.html">Create one here</a></small>
+                            </div>
+                            <div class="mb-3">
+                                <label for="givingCampus" class="form-label">Campus</label>
+                                <select class="form-select" id="givingCampus" onchange="updateParkingLocations()">
+                                    <option selected>Choose campus...</option>
+                                    <option value="ua-tuscaloosa">University of Alabama - Tuscaloosa</option>
+                                    <option value="ua-birmingham">University of Alabama - Birmingham</option>
+                                    <option value="ua-huntsville">University of Alabama - Huntsville</option>
+                                    <option value="auburn">Auburn</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="givingLocation" class="form-label">Spot Location</label>
+                                <select class="form-select" id="givingLocation" disabled>
+                                    <option selected>Select campus first...</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="givingTime" class="form-label">Time willing to wait</label>
+                                <select class="form-select" id="givingTime">
+                                    <option selected>Choose time...</option>
+                                    <option value="1">1 minute</option>
+                                    <option value="2">2 minutes</option>
+                                    <option value="3">3 minutes</option>
+                                    <option value="4">4 minutes</option>
+                                    <option value="5">5 minutes</option>
+                                    <option value="6">6 minutes</option>
+                                    <option value="7">7 minutes</option>
+                                    <option value="8">8 minutes</option>
+                                    <option value="9">9 minutes</option>
+                                    <option value="10">10 minutes</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="givingMessage" class="form-label">Additional Details (Optional)</label>
+                                <textarea class="form-control" id="givingMessage" rows="3" placeholder="Ex: Orange, Magnolia Parking Deck 3rd floor, Black Honda Pilot"></textarea>
+                            </div>
+                            <button type="submit" class="btn bg-mPurple text-white w-100" id="postSpotBtn">Post Spot</button>
+                        </form>
+                        <div class="alert alert-danger mt-3" id="accountError" style="display: none;">
+                            <strong>Account Required!</strong> <span id="accountErrorText"></span>
+                        </div>
+                        
+                        <!-- Countdown Timer Section -->
+                        <div class="alert alert-info mt-3" id="countdownSection" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Spot Posted!</strong> Waiting for someone to claim your spot...
+                                </div>
+                                <div class="text-end">
+                                    <div class="h4 mb-0 text-primary" id="countdownTimer">00:00</div>
+                                    <small class="text-muted">Time remaining</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    
+    <script>
+        // Check if account exists in local storage
+        function doesAccountExist(accountName) {
+            const accounts = JSON.parse(localStorage.getItem('parkingAccounts') || '[]');
+            return accounts.some(account => account.name.toLowerCase() === accountName.toLowerCase());
+        }
+
+        // Handle form submission for giving up a spot
+        document.querySelector('#givingCampus').closest('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const accountName = document.getElementById('givingAccountName').value.trim();
+            const campus = document.getElementById('givingCampus').value;
+            const location = document.getElementById('givingLocation').value;
+            const timeWait = document.getElementById('givingTime').value;
+            const message = document.getElementById('givingMessage').value.trim();
+            
+            const accountError = document.getElementById('accountError');
+            const accountErrorText = document.getElementById('accountErrorText');
+            
+            // Hide error message
+            accountError.style.display = 'none';
+            
+            // Check if account name is provided
+            if (!accountName) {
+                accountErrorText.textContent = 'Please enter your account name.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            // Check if account exists
+            if (!doesAccountExist(accountName)) {
+                accountErrorText.textContent = `Account "${accountName}" does not exist. Please create an account first.`;
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            // Check if all required fields are filled
+            if (!campus || campus === 'Choose campus...') {
+                accountErrorText.textContent = 'Please select a campus.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            if (!location || location === 'Select campus first...' || location === 'Choose location...') {
+                accountErrorText.textContent = 'Please select a parking location.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            if (!timeWait || timeWait === 'Choose time...') {
+                accountErrorText.textContent = 'Please select how long you are willing to wait.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            // If all validations pass, store spot data and start countdown timer
+            storeSpotData(accountName, campus, location, timeWait, message);
+            startCountdown(parseInt(timeWait));
+            
+            // Reset form
+            this.reset();
+            document.getElementById('givingLocation').disabled = true;
+            document.getElementById('givingLocation').innerHTML = '<option selected>Select campus first...</option>';
+        });
+
+        // Handle form submission for looking for a spot
+        document.querySelector('#lookingCampus').closest('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const campus = document.getElementById('lookingCampus').value;
+            const location = document.getElementById('lookingLocation').value;
+            const message = document.getElementById('lookingMessage').value.trim();
+            
+            // Check if all required fields are filled
+            if (!campus || campus === 'Choose campus...') {
+                alert('Please select a campus.');
+                return;
+            }
+            
+            if (!location || location === 'Select campus first...' || location === 'Choose location...') {
+                alert('Please select a parking location.');
+                return;
+            }
+            
+            // Look for matching spots
+            const match = findMatchingSpot(campus, location);
+            
+            if (match) {
+                displayCarInformation(match);
+            } else {
+                alert('No available spots found for your location. Keep checking!');
+            }
+            
+            // Reset form
+            this.reset();
+            document.getElementById('lookingLocation').disabled = true;
+            document.getElementById('lookingLocation').innerHTML = '<option selected>Select campus first...</option>';
+        });
+
+        // Real-time account validation
+        document.getElementById('givingAccountName').addEventListener('input', function() {
+            const accountName = this.value.trim();
+            const accountError = document.getElementById('accountError');
+            
+            if (accountName && !doesAccountExist(accountName)) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        // Function for "Looking for a Spot" campus selection
+        function updateLookingParkingLocations() {
+            const campus = document.getElementById('lookingCampus').value;
+            const locationSelect = document.getElementById('lookingLocation');
+            
+            // Clear existing options
+            locationSelect.innerHTML = '';
+            
+            if (campus === 'ua-tuscaloosa') {
+                locationSelect.disabled = false;
+                locationSelect.innerHTML = `
+                    <option selected>Choose location...</option>
+                    <option value="orange">Orange</option>
+                    <option value="silver">Silver</option>
+                    <option value="tan">Tan</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="east-commuter">East Commuter</option>
+                    <option value="west-commuter">West Commuter</option>
+                    <option value="fs-parking">FS Parking</option>
+                `;
+            } else if (campus === 'ua-birmingham') {
+                locationSelect.disabled = false;
+                locationSelect.innerHTML = `
+                    <option selected>Choose location...</option>
+                    <option value="orange">Orange</option>
+                    <option value="silver">Silver</option>
+                    <option value="tan">Tan</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="east-commuter">East Commuter</option>
+                    <option value="west-commuter">West Commuter</option>
+                    <option value="fs-parking">FS Parking</option>
+                `;
+            } else if (campus === 'ua-huntsville') {
+                locationSelect.disabled = false;
+                locationSelect.innerHTML = `
+                    <option selected>Choose location...</option>
+                    <option value="residential">Residential</option>
+                    <option value="commuter">Commuter</option>
+                    <option value="faculty-staff">Faculty/Staff</option>
+                `;
+            } else if (campus === 'auburn') {
+                locationSelect.disabled = false;
+                locationSelect.innerHTML = `
+                    <option selected>Choose location...</option>
+                    <option value="a-zone">A-zone</option>
+                    <option value="b-zone">B-zone</option>
+                    <option value="c-zone">C-zone</option>
+                    <option value="pc">PC</option>
+                    <option value="rd">RD</option>
+                    <option value="rh">RH</option>
+                    <option value="ro">RO</option>
+                    <option value="rw">RW</option>
+                `;
+            } else {
+                locationSelect.disabled = true;
+                locationSelect.innerHTML = '<option selected>Select campus first...</option>';
+            }
+        }
+
+        // Function for "Giving up a Spot" campus selection
+        function updateParkingLocations() {
+            const campus = document.getElementById('givingCampus').value;
+            const locationSelect = document.getElementById('givingLocation');
+            
+            // Clear existing options
+            locationSelect.innerHTML = '';
+            
+            if (campus === 'ua-tuscaloosa') {
+                locationSelect.disabled = false;
+                locationSelect.innerHTML = `
+                    <option selected>Choose location...</option>
+                    <option value="orange">Orange</option>
+                    <option value="silver">Silver</option>
+                    <option value="tan">Tan</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="east-commuter">East Commuter</option>
+                    <option value="west-commuter">West Commuter</option>
+                    <option value="fs-parking">FS Parking</option>
+                `;
+            } else if (campus === 'ua-birmingham') {
+                locationSelect.disabled = false;
+                locationSelect.innerHTML = `
+                    <option selected>Choose location...</option>
+                    <option value="orange">Orange</option>
+                    <option value="silver">Silver</option>
+                    <option value="tan">Tan</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="east-commuter">East Commuter</option>
+                    <option value="west-commuter">West Commuter</option>
+                    <option value="fs-parking">FS Parking</option>
+                `;
+            } else if (campus === 'ua-huntsville') {
+                locationSelect.disabled = false;
+                locationSelect.innerHTML = `
+                    <option selected>Choose location...</option>
+                    <option value="residential">Residential</option>
+                    <option value="commuter">Commuter</option>
+                    <option value="faculty-staff">Faculty/Staff</option>
+                `;
+            } else if (campus === 'auburn') {
+                locationSelect.disabled = false;
+                locationSelect.innerHTML = `
+                    <option selected>Choose location...</option>
+                    <option value="a-zone">A-zone</option>
+                    <option value="b-zone">B-zone</option>
+                    <option value="c-zone">C-zone</option>
+                    <option value="pc">PC</option>
+                    <option value="rd">RD</option>
+                    <option value="rh">RH</option>
+                    <option value="ro">RO</option>
+                    <option value="rw">RW</option>
+                `;
+            } else {
+                locationSelect.disabled = true;
+                locationSelect.innerHTML = '<option selected>Select campus first...</option>';
+            }
+        }
+
+        // Store spot data when someone gives up a spot
+        function storeSpotData(accountName, campus, location, timeWait, message) {
+            const accounts = JSON.parse(localStorage.getItem('parkingAccounts') || '[]');
+            const account = accounts.find(acc => acc.name.toLowerCase() === accountName.toLowerCase());
+            
+            if (account) {
+                const spotData = {
+                    id: Date.now(), // Unique ID
+                    accountName: accountName,
+                    campus: campus,
+                    location: location,
+                    timeWait: timeWait,
+                    message: message,
+                    carModel: account.carModel,
+                    carColor: account.carColor,
+                    createdAt: new Date().toISOString(),
+                    expiresAt: new Date(Date.now() + (parseInt(timeWait) * 60 * 1000)).toISOString()
+                };
+                
+                const spots = JSON.parse(localStorage.getItem('availableSpots') || '[]');
+                spots.push(spotData);
+                localStorage.setItem('availableSpots', JSON.stringify(spots));
+                
+                // Remove expired spots
+                cleanupExpiredSpots();
+            }
+        }
+
+        // Find matching spot for someone looking
+        function findMatchingSpot(campus, location) {
+            cleanupExpiredSpots();
+            const spots = JSON.parse(localStorage.getItem('availableSpots') || '[]');
+            
+            // Find first matching spot
+            const match = spots.find(spot => 
+                spot.campus === campus && 
+                spot.location === location &&
+                new Date(spot.expiresAt) > new Date()
+            );
+            
+            return match;
+        }
+
+        // Display car information when match is found
+        function displayCarInformation(match) {
+            const timeRemaining = Math.max(0, Math.ceil((new Date(match.expiresAt) - new Date()) / 60000));
+            
+            const carInfoHTML = `
+                <div class="alert alert-success mt-3" id="matchFound">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5 class="alert-heading">🎉 Spot Found!</h5>
+                            <p><strong>Location:</strong> ${match.campus} - ${match.location}</p>
+                            <p><strong>Car Details:</strong></p>
+                            <ul class="mb-2">
+                                <li><strong>Model:</strong> ${match.carModel}</li>
+                                <li><strong>Color:</strong> ${match.carColor}</li>
+                                <li><strong>Posted by:</strong> ${match.accountName}</li>
+                            </ul>
+                            ${match.message ? `<p><strong>Additional Info:</strong> ${match.message}</p>` : ''}
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="h4 text-warning mb-1">${timeRemaining}</div>
+                            <small class="text-muted">minutes left</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Hurry! This spot expires in ${timeRemaining} minutes.</small>
+                        <button class="btn btn-sm btn-outline-success" onclick="document.getElementById('matchFound').style.display='none'">
+                            Got it!
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Insert after the looking form
+            const lookingForm = document.querySelector('#lookingCampus').closest('.card');
+            const existingMatch = document.getElementById('matchFound');
+            if (existingMatch) {
+                existingMatch.remove();
+            }
+            
+            lookingForm.insertAdjacentHTML('afterend', carInfoHTML);
+        }
+
+        // Clean up expired spots
+        function cleanupExpiredSpots() {
+            const spots = JSON.parse(localStorage.getItem('availableSpots') || '[]');
+            const activeSpots = spots.filter(spot => new Date(spot.expiresAt) > new Date());
+            localStorage.setItem('availableSpots', JSON.stringify(activeSpots));
+        }
+
+        // Countdown timer function
+        function startCountdown(minutes) {
+            const countdownSection = document.getElementById('countdownSection');
+            const countdownTimer = document.getElementById('countdownTimer');
+            
+            // Show countdown section
+            countdownSection.style.display = 'block';
+            
+            // Calculate total seconds
+            let totalSeconds = minutes * 60;
+            
+            // Update timer display
+            function updateTimer() {
+                const remainingMinutes = Math.floor(totalSeconds / 60);
+                const remainingSeconds = totalSeconds % 60;
+                
+                // Format with leading zeros
+                const formattedMinutes = remainingMinutes.toString().padStart(2, '0');
+                const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
+                
+                countdownTimer.textContent = `${formattedMinutes}:${formattedSeconds}`;
+                
+                // Change color as time runs out
+                if (totalSeconds <= 60) {
+                    countdownTimer.classList.remove('text-primary');
+                    countdownTimer.classList.add('text-danger');
+                } else if (totalSeconds <= 180) {
+                    countdownTimer.classList.remove('text-primary');
+                    countdownTimer.classList.add('text-warning');
+                }
+                
+                if (totalSeconds <= 0) {
+                    // Timer finished
+                    clearInterval(timerInterval);
+                    countdownSection.innerHTML = `
+                        <div class="text-center">
+                            <strong>Time's Up!</strong> Your spot is no longer available.
+                            <button class="btn btn-sm btn-outline-secondary ms-2" onclick="document.getElementById('countdownSection').style.display='none'">
+                                Close
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                totalSeconds--;
+            }
+            
+            // Update immediately and then every second
+            updateTimer();
+            const timerInterval = setInterval(updateTimer, 1000);
+        }
+    </script>
 </body>
 </html>
