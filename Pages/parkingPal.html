@@ -80,10 +80,6 @@
                                     <option value="FallSpring – Zone B">Fall/Spring Zone B</option>
                                     <option value="Fall (only) – Zone B">Fall (only) Zone B</option>
                                     <option value="FallSpring – Zone D, E, F, G">Fall/Spring Zone D, E, F, G</option>
-                                    <option value="orange">Orange</option>
-                                    <option value="silver">Silver</option>
-                                    <option value="tan">Tan</option>
-                                    <option value="yellow">Yellow</option>
                                 </select>
                             </div>
                             <div class="mb-3" id="commuterPassSection" style="display: none;">
@@ -266,8 +262,8 @@
                     // UAB residential students get zone-based parking
                     parkingPassSection.style.display = 'block';
                 } else if (destination === 'ua-tuscaloosa') {
-                    // UA Tuscaloosa residential students get color-based parking
-                    parkingPassSection.style.display = 'block';
+                    // UA Tuscaloosa residential students get East/West Commuter options
+                    commuterPassSection.style.display = 'block';
                 } else if (destination === 'ua-huntsville') {
                     // UAH residential students don't need further selection - handled in form submission
                     // No additional dropdown needed
@@ -277,7 +273,7 @@
                     // UAB commuter students get zone-based parking
                     commuterPassSection.style.display = 'block';
                 } else if (destination === 'ua-tuscaloosa') {
-                    // UA Tuscaloosa commuter students get commuter-specific parking
+                    // UA Tuscaloosa commuter students get East/West Commuter options
                     commuterPassSection.style.display = 'block';
                 } else if (destination === 'ua-huntsville') {
                     // UAH commuter students don't need further selection - handled in form submission
@@ -423,26 +419,8 @@
                     imageDisplaySection.style.display = 'block';
                 }
             } else if (destination === 'ua-tuscaloosa') {
-                // UA Tuscaloosa-specific parking logic
-                if (parkingPass === 'orange') {
-                    parkingImage.src = '../Images/Orange Parking.png';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Orange Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'silver') {
-                    parkingImage.src = '../Images/Silver Parking.png';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Silver Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'tan') {
-                    parkingImage.src = '../Images/Tan Parking.png';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Tan Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'yellow') {
-                    parkingImage.src = '../Images/Yellow Parking1.png';
-                    parkingImage2.src = '../Images/Yellow Parking2.png';
-                    parkingImage2.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Yellow Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                } else if (commuterPass === 'east-commuter') {
+                // UA Tuscaloosa-specific parking logic - only East/West Commuter
+                if (commuterPass === 'east-commuter') {
                     parkingImage.src = '../Images/East Commuter.png';
                     parkingImage2.src = '../Images/East Commuter2.png';
                     parkingImage3.src = '../Images/East Commuter3.png';
