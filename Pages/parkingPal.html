@@ -411,17 +411,7 @@
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone C Parking Map (Fall Only)';
                     imageDisplaySection.style.display = 'block';
                 } else if (facultyStaffPass === 'fs-parking') {
-                    parkingImage.src = '../Images/FS Parking.png';
-                    parkingImage2.src = '../Images/FS Parking2.png';
-                    parkingImage3.src = '../Images/FS Parking3.png';
-                    parkingImage4.src = '../Images/FS Parking4.png';
-                    parkingImage5.src = '../Images/FS Parking5.png';
-                    parkingImage6.src = '../Images/FS Parking6.png';
-                    parkingImage2.style.display = 'block';
-                    parkingImage3.style.display = 'block';
-                    parkingImage4.style.display = 'block';
-                    parkingImage5.style.display = 'block';
-                    parkingImage6.style.display = 'block';
+                    parkingImage.src = '../Images/Employee parking.jpeg';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Faculty/Staff Parking Map';
                     imageDisplaySection.style.display = 'block';
                 }
@@ -460,6 +450,20 @@
                 } else if (commuterPass === 'west-commuter') {
                     parkingImage.src = '../Images/West Commuter.png';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa West Commuter Parking Map';
+                    imageDisplaySection.style.display = 'block';
+                } else if (facultyStaffPass === 'fs-parking') {
+                    parkingImage.src = '../Images/FS Parking.png';
+                    parkingImage2.src = '../Images/FS Parking2.png';
+                    parkingImage3.src = '../Images/FS Parking3.png';
+                    parkingImage4.src = '../Images/FS Parking4.png';
+                    parkingImage5.src = '../Images/FS Parking5.png';
+                    parkingImage6.src = '../Images/FS Parking6.png';
+                    parkingImage2.style.display = 'block';
+                    parkingImage3.style.display = 'block';
+                    parkingImage4.style.display = 'block';
+                    parkingImage5.style.display = 'block';
+                    parkingImage6.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Faculty/Staff Parking Map';
                     imageDisplaySection.style.display = 'block';
                 }
             } else if (destination === 'ua-huntsville') {
@@ -558,20 +562,6 @@
                 document.querySelector('#imageDisplaySection h4').textContent = 'UAH Faculty/Staff Parking';
                 imageDisplaySection.style.display = 'block';
                 imageSource.style.display = 'block';
-            } else if (facultyStaffPass === 'fs-parking') {
-                parkingImage.src = '../Images/FS Parking.png';
-                parkingImage2.src = '../Images/FS Parking2.png';
-                parkingImage3.src = '../Images/FS Parking3.png';
-                parkingImage4.src = '../Images/FS Parking4.png';
-                parkingImage5.src = '../Images/FS Parking5.png';
-                parkingImage6.src = '../Images/FS Parking6.png';
-                parkingImage2.style.display = 'block';
-                parkingImage3.style.display = 'block';
-                parkingImage4.style.display = 'block';
-                parkingImage5.style.display = 'block';
-                parkingImage6.style.display = 'block';
-                document.querySelector('#imageDisplaySection h4').textContent = 'Faculty/Staff Parking Map';
-                imageDisplaySection.style.display = 'block';
             } else {
                 imageDisplaySection.style.display = 'none';
             }
