@@ -454,7 +454,7 @@
                     parkingImage.src = '../Images/Fall (only) – Zone C.jpeg';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone C Parking Map (Fall Only)';
                     imageDisplaySection.style.display = 'block';
-                } else if (facultyStaffPass === 'fs-parking') {
+                } else if (userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
                     parkingImage.src = '../Images/Employee parking.jpeg';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Faculty/Staff Parking Map';
                     imageDisplaySection.style.display = 'block';
@@ -495,7 +495,7 @@
                     parkingImage.src = '../Images/West Commuter.png';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa West Commuter Parking Map';
                     imageDisplaySection.style.display = 'block';
-                } else if (facultyStaffPass === 'fs-parking') {
+                } else if (userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
                     parkingImage.src = '../Images/FS Parking.png';
                     parkingImage2.src = '../Images/FS Parking2.png';
                     parkingImage3.src = '../Images/FS Parking3.png';
