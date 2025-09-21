@@ -74,7 +74,7 @@
                                 <label for="parkingPass" class="form-label">Which parking pass do you have?</label>
                                 <select class="form-select" id="parkingPass">
                                     <option value="" selected disabled>Select your parking pass</option>
-                                    <!-- UAB Residential Zone-based options -->
+                                    <!-- UAB Zone-based options -->
                                     <option value="FallSpring – Zone A or Zone H">Fall/Spring Zone A or Zone H</option>
                                     <option value="Fall (only) – Zone A or Zone H">Fall (only) Zone A or Zone H</option>
                                     <option value="FallSpring – Zone D9A">Fall/Spring Zone D9A</option>
@@ -88,25 +88,20 @@
                                     <option value="yellow">Yellow</option>
                                 </select>
                             </div>
-                            <div class="mb-3" id="uabCommuterPassSection" style="display: none;">
-                                <label for="uabCommuterPass" class="form-label">Which UAB commuter parking pass do you have?</label>
-                                <select class="form-select" id="uabCommuterPass">
-                                    <option value="" selected disabled>Select your UAB commuter pass</option>
-                                    <!-- UAB Commuter options - only Fall/Spring and Fall (only) -->
-                                    <option value="FallSpring – Zone A or Zone H">Fall/Spring Zone A or Zone H</option>
-                                    <option value="Fall (only) – Zone A or Zone H">Fall (only) Zone A or Zone H</option>
-                                    <option value="FallSpring – Zone B">Fall/Spring Zone B</option>
-                                    <option value="Fall (only) – Zone B">Fall (only) Zone B</option>
-                                    <option value="FallSpring – Zone D, E, F, G">Fall/Spring Zone D, E, F, G</option>
+                            <div class="mb-3" id="commuterPassSection" style="display: none;">
+                                <label for="commuterPass" class="form-label">Which commuter parking pass do you have?</label>
+                                <select class="form-select" id="commuterPass">
+                                    <option value="" selected disabled>Select your commuter pass</option>
+                                    <!-- UAB Commuter options -->
                                     <option value="Fall (only) – Zone D, E, F, G">Fall (only) Zone D, E, F, G</option>
                                     <option value="FallSpring – Zone C">Fall/Spring Zone C</option>
                                     <option value="Fall (only) – Zone C">Fall (only) Zone C</option>
                                 </select>
                             </div>
                             <div class="mb-3" id="tuscaloosaCommuterPassSection" style="display: none;">
-                                <label for="tuscaloosaCommuterPass" class="form-label">Which UA Tuscaloosa commuter parking pass do you have?</label>
+                                <label for="tuscaloosaCommuterPass" class="form-label">Which commuter parking pass do you have?</label>
                                 <select class="form-select" id="tuscaloosaCommuterPass">
-                                    <option value="" selected disabled>Select your UA Tuscaloosa commuter pass</option>
+                                    <option value="" selected disabled>Select your commuter pass</option>
                                     <!-- UA Tuscaloosa Commuter options -->
                                     <option value="east-commuter">East Commuter</option>
                                     <option value="west-commuter">West Commuter</option>
@@ -178,7 +173,7 @@
             const userTypeSection = document.getElementById('userTypeSection');
             const studentTypeSection = document.getElementById('studentTypeSection');
             const parkingPassSection = document.getElementById('parkingPassSection');
-            const uabCommuterPassSection = document.getElementById('uabCommuterPassSection');
+            const commuterPassSection = document.getElementById('commuterPassSection');
             const tuscaloosaCommuterPassSection = document.getElementById('tuscaloosaCommuterPassSection');
             const facultyStaffSection = document.getElementById('facultyStaffSection');
             const auburnFacultyStaffSection = document.getElementById('auburnFacultyStaffSection');
@@ -188,7 +183,7 @@
             // Hide all sections first
             studentTypeSection.style.display = 'none';
             parkingPassSection.style.display = 'none';
-            uabCommuterPassSection.style.display = 'none';
+            commuterPassSection.style.display = 'none';
             tuscaloosaCommuterPassSection.style.display = 'none';
             facultyStaffSection.style.display = 'none';
             auburnFacultyStaffSection.style.display = 'none';
@@ -199,7 +194,7 @@
             document.getElementById('userType').selectedIndex = 0;
             document.getElementById('studentType').selectedIndex = 0;
             document.getElementById('parkingPass').selectedIndex = 0;
-            document.getElementById('uabCommuterPass').selectedIndex = 0;
+            document.getElementById('commuterPass').selectedIndex = 0;
             document.getElementById('tuscaloosaCommuterPass').selectedIndex = 0;
             document.getElementById('facultyStaffPass').selectedIndex = 0;
             document.getElementById('auburnFacultyStaffPass').selectedIndex = 0;
@@ -216,7 +211,7 @@
             const destination = document.getElementById('destination').value;
             const studentTypeSection = document.getElementById('studentTypeSection');
             const parkingPassSection = document.getElementById('parkingPassSection');
-            const uabCommuterPassSection = document.getElementById('uabCommuterPassSection');
+            const commuterPassSection = document.getElementById('commuterPassSection');
             const tuscaloosaCommuterPassSection = document.getElementById('tuscaloosaCommuterPassSection');
             const facultyStaffSection = document.getElementById('facultyStaffSection');
             const auburnFacultyStaffSection = document.getElementById('auburnFacultyStaffSection');
@@ -226,7 +221,7 @@
             // Hide all sections first
             studentTypeSection.style.display = 'none';
             parkingPassSection.style.display = 'none';
-            uabCommuterPassSection.style.display = 'none';
+            commuterPassSection.style.display = 'none';
             tuscaloosaCommuterPassSection.style.display = 'none';
             facultyStaffSection.style.display = 'none';
             auburnFacultyStaffSection.style.display = 'none';
@@ -236,7 +231,7 @@
             // Reset selections
             document.getElementById('studentType').selectedIndex = 0;
             document.getElementById('parkingPass').selectedIndex = 0;
-            document.getElementById('uabCommuterPass').selectedIndex = 0;
+            document.getElementById('commuterPass').selectedIndex = 0;
             document.getElementById('tuscaloosaCommuterPass').selectedIndex = 0;
             document.getElementById('facultyStaffPass').selectedIndex = 0;
             document.getElementById('auburnFacultyStaffPass').selectedIndex = 0;
@@ -267,21 +262,21 @@
         document.getElementById('studentType').addEventListener('change', function() {
             const destination = document.getElementById('destination').value;
             const parkingPassSection = document.getElementById('parkingPassSection');
-            const uabCommuterPassSection = document.getElementById('uabCommuterPassSection');
+            const commuterPassSection = document.getElementById('commuterPassSection');
             const tuscaloosaCommuterPassSection = document.getElementById('tuscaloosaCommuterPassSection');
             const facultyStaffSection = document.getElementById('facultyStaffSection');
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             
             // Hide all sections first
             parkingPassSection.style.display = 'none';
-            uabCommuterPassSection.style.display = 'none';
+            commuterPassSection.style.display = 'none';
             tuscaloosaCommuterPassSection.style.display = 'none';
             facultyStaffSection.style.display = 'none';
             imageDisplaySection.style.display = 'none';
             
             // Reset selections
             document.getElementById('parkingPass').selectedIndex = 0;
-            document.getElementById('uabCommuterPass').selectedIndex = 0;
+            document.getElementById('commuterPass').selectedIndex = 0;
             document.getElementById('tuscaloosaCommuterPass').selectedIndex = 0;
             document.getElementById('facultyStaffPass').selectedIndex = 0;
             
@@ -298,10 +293,10 @@
                 }
             } else if (this.value === 'commuter') {
                 if (destination === 'ua-birmingham') {
-                    // UAB commuter students get UAB-specific commuter parking
-                    uabCommuterPassSection.style.display = 'block';
+                    // UAB commuter students get zone-based parking
+                    commuterPassSection.style.display = 'block';
                 } else if (destination === 'ua-tuscaloosa') {
-                    // UA Tuscaloosa commuter students get Tuscaloosa-specific commuter parking
+                    // UA Tuscaloosa commuter students get commuter-specific parking
                     tuscaloosaCommuterPassSection.style.display = 'block';
                 } else if (destination === 'ua-huntsville') {
                     // UAH commuter students don't need further selection - handled in form submission
@@ -316,9 +311,9 @@
             imageDisplaySection.style.display = 'none';
         });
 
-        document.getElementById('uabCommuterPass').addEventListener('change', function() {
+        document.getElementById('commuterPass').addEventListener('change', function() {
             const imageDisplaySection = document.getElementById('imageDisplaySection');
-            // Hide image when UAB commuter pass changes
+            // Hide image when commuter pass changes
             imageDisplaySection.style.display = 'none';
         });
 
@@ -354,7 +349,7 @@
             const userType = document.getElementById('userType').value;
             const studentType = document.getElementById('studentType').value;
             const parkingPass = document.getElementById('parkingPass').value;
-            const uabCommuterPass = document.getElementById('uabCommuterPass').value;
+            const commuterPass = document.getElementById('commuterPass').value;
             const tuscaloosaCommuterPass = document.getElementById('tuscaloosaCommuterPass').value;
             const facultyStaffPass = document.getElementById('facultyStaffPass').value;
             const auburnFacultyStaffPass = document.getElementById('auburnFacultyStaffPass').value;
@@ -385,28 +380,28 @@
             
             // UAB-specific parking logic
             if (destination === 'ua-birmingham') {
-                if (parkingPass === 'FallSpring – Zone A or Zone H') {
+            if (parkingPass === 'FallSpring – Zone A or Zone H') {
                     parkingImage.src = '../Images/FallSpring – Zone A or Zone H1.jpeg';
                     parkingImage2.src = '../Images/FallSpring – Zone A or Zone H2.jpeg';
-                    parkingImage2.style.display = 'block';
+                parkingImage2.style.display = 'block';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone A/H Parking Map (Fall/Spring)';
-                    imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'Fall (only) – Zone A or Zone H') {
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'Fall (only) – Zone A or Zone H') {
                     parkingImage.src = '../Images/Fall (only) – Zone A or Zone H1.jpeg';
                     parkingImage2.src = '../Images/Fall (only) – Zone A or Zone H2.jpeg';
-                    parkingImage2.style.display = 'block';
+                parkingImage2.style.display = 'block';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone A/H Parking Map (Fall Only)';
-                    imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'FallSpring – Zone D9A') {
-                    parkingImage.src = '../Images/FallSpring – Zone D9A.jpeg';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'FallSpring – Zone D9A') {
+                parkingImage.src = '../Images/FallSpring – Zone D9A.jpeg';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone D9A Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'FallSpring – Zone B') {
-                    parkingImage.src = '../Images/FallSpring – Zone B.jpeg';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'FallSpring – Zone B') {
+                parkingImage.src = '../Images/FallSpring – Zone B.jpeg';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone B Parking Map (Fall/Spring)';
-                    imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'Fall (only) – Zone B') {
-                    parkingImage.src = '../Images/Fall (only) – Zone B.jpeg';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'Fall (only) – Zone B') {
+                parkingImage.src = '../Images/Fall (only) – Zone B.jpeg';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone B Parking Map (Fall Only)';
                     imageDisplaySection.style.display = 'block';
                 } else if (parkingPass === 'FallSpring – Zone D, E, F, G') {
@@ -419,37 +414,7 @@
                     parkingImage4.style.display = 'block';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone D, E, F, G Parking Map (Fall/Spring)';
                     imageDisplaySection.style.display = 'block';
-                } else if (uabCommuterPass === 'FallSpring – Zone A or Zone H') {
-                    parkingImage.src = '../Images/FallSpring – Zone A or Zone H1.jpeg';
-                    parkingImage2.src = '../Images/FallSpring – Zone A or Zone H2.jpeg';
-                    parkingImage2.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone A/H Parking Map (Fall/Spring)';
-                    imageDisplaySection.style.display = 'block';
-                } else if (uabCommuterPass === 'Fall (only) – Zone A or Zone H') {
-                    parkingImage.src = '../Images/Fall (only) – Zone A or Zone H1.jpeg';
-                    parkingImage2.src = '../Images/Fall (only) – Zone A or Zone H2.jpeg';
-                    parkingImage2.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone A/H Parking Map (Fall Only)';
-                    imageDisplaySection.style.display = 'block';
-                } else if (uabCommuterPass === 'FallSpring – Zone B') {
-                    parkingImage.src = '../Images/FallSpring – Zone B.jpeg';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone B Parking Map (Fall/Spring)';
-                    imageDisplaySection.style.display = 'block';
-                } else if (uabCommuterPass === 'Fall (only) – Zone B') {
-                    parkingImage.src = '../Images/Fall (only) – Zone B.jpeg';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone B Parking Map (Fall Only)';
-                    imageDisplaySection.style.display = 'block';
-                } else if (uabCommuterPass === 'FallSpring – Zone D, E, F, G') {
-                    parkingImage.src = '../Images/FallSpring – Zone D, E, F, G1.jpeg';
-                    parkingImage2.src = '../Images/FallSpring – Zone D, E, F, G2.jpeg';
-                    parkingImage3.src = '../Images/FallSpring – Zone D, E, F, G3.jpeg';
-                    parkingImage4.src = '../Images/FallSpring – Zone D, E, F, G4.jpeg';
-                    parkingImage2.style.display = 'block';
-                    parkingImage3.style.display = 'block';
-                    parkingImage4.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone D, E, F, G Parking Map (Fall/Spring)';
-                    imageDisplaySection.style.display = 'block';
-                } else if (uabCommuterPass === 'Fall (only) – Zone D, E, F, G') {
+                } else if (commuterPass === 'Fall (only) – Zone D, E, F, G') {
                     parkingImage.src = '../Images/Fall (only) – Zone D, E, F, G1.jpeg';
                     parkingImage2.src = '../Images/Fall (only) – Zone D, E, F, G2.jpeg';
                     parkingImage3.src = '../Images/Fall (only) – Zone D, E, F, G3.jpeg';
@@ -459,11 +424,11 @@
                     parkingImage4.style.display = 'block';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone D, E, F, G Parking Map (Fall Only)';
                     imageDisplaySection.style.display = 'block';
-                } else if (uabCommuterPass === 'FallSpring – Zone C') {
+                } else if (commuterPass === 'FallSpring – Zone C') {
                     parkingImage.src = '../Images/FallSpring – Zone C.jpeg';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone C Parking Map (Fall/Spring)';
                     imageDisplaySection.style.display = 'block';
-                } else if (uabCommuterPass === 'Fall (only) – Zone C') {
+                } else if (commuterPass === 'Fall (only) – Zone C') {
                     parkingImage.src = '../Images/Fall (only) – Zone C.jpeg';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone C Parking Map (Fall Only)';
                     imageDisplaySection.style.display = 'block';
