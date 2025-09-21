@@ -48,8 +48,8 @@
                                 <label for="destination" class="form-label">Where do you want to go?</label>
                                 <select class="form-select" id="destination">
                                     <option value="" selected disabled>Select a university</option>
-                                    <option value="ua-birmingham">University of Alabama - Birmingham</option>
                                     <option value="ua-tuscaloosa">University of Alabama - Tuscaloosa</option>
+                                    <option value="ua-birmingham">University of Alabama - Birmingham</option>
                                     <option value="ua-huntsville">University of Alabama - Huntsville</option>
                                     <option value="auburn">Auburn</option>
                                 </select>
@@ -74,12 +74,6 @@
                                 <label for="parkingPass" class="form-label">Which parking pass do you have?</label>
                                 <select class="form-select" id="parkingPass">
                                     <option value="" selected disabled>Select your parking pass</option>
-                                    <option value="FallSpring – Zone A or Zone H">Fall/Spring Zone A or Zone H</option>
-                                    <option value="Fall (only) – Zone A or Zone H">Fall (only) Zone A or Zone H</option>
-                                    <option value="FallSpring – Zone D9A">Fall/Spring Zone D9A</option>
-                                    <option value="FallSpring – Zone B">Fall/Spring Zone B</option>
-                                    <option value="Fall (only) – Zone B">Fall (only) Zone B</option>
-                                    <option value="FallSpring – Zone D, E, F, G">Fall/Spring Zone D, E, F, G</option>
                                     <option value="orange">Orange</option>
                                     <option value="silver">Silver</option>
                                     <option value="tan">Tan</option>
@@ -90,9 +84,6 @@
                                 <label for="commuterPass" class="form-label">Which commuter parking pass do you have?</label>
                                 <select class="form-select" id="commuterPass">
                                     <option value="" selected disabled>Select your commuter pass</option>
-                                    <option value="Fall (only) – Zone D, E, F, G">Fall (only) Zone D, E, F, G</option>
-                                    <option value="FallSpring – Zone C">Fall/Spring Zone C</option>
-                                    <option value="Fall (only) – Zone C">Fall (only) Zone C</option>
                                     <option value="east-commuter">East Commuter</option>
                                     <option value="west-commuter">West Commuter</option>
                                 </select>
@@ -163,34 +154,50 @@
             const userTypeSection = document.getElementById('userTypeSection');
             const studentTypeSection = document.getElementById('studentTypeSection');
             const parkingPassSection = document.getElementById('parkingPassSection');
-            const commuterPassSection = document.getElementById('commuterPassSection');
-            const facultyStaffSection = document.getElementById('facultyStaffSection');
             const auburnFacultyStaffSection = document.getElementById('auburnFacultyStaffSection');
             const auburnStudentPassSection = document.getElementById('auburnStudentPassSection');
-            const imageDisplaySection = document.getElementById('imageDisplaySection');
-            
-            // Hide all sections first
+            if (this.value === 'ua-tuscaloosa') {
+                userTypeSection.style.display = 'block';
+                // Hide Auburn-specific sections
+                auburnFacultyStaffSection.style.display = 'none';
+                auburnStudentPassSection.style.display = 'none';
+            } else if (this.value === 'ua-huntsville') {
+                userTypeSection.style.display = 'block';
+                // For UAH, ensure downstream dropdowns are hidden/reset by default
                 studentTypeSection.style.display = 'none';
                 parkingPassSection.style.display = 'none';
-            commuterPassSection.style.display = 'none';
-            facultyStaffSection.style.display = 'none';
-            auburnFacultyStaffSection.style.display = 'none';
-            auburnStudentPassSection.style.display = 'none';
-            imageDisplaySection.style.display = 'none';
-            
-            // Reset all selections
+                // Hide Auburn-specific sections
+                auburnFacultyStaffSection.style.display = 'none';
+                auburnStudentPassSection.style.display = 'none';
                 document.getElementById('userType').selectedIndex = 0;
                 document.getElementById('studentType').selectedIndex = 0;
                 document.getElementById('parkingPass').selectedIndex = 0;
-            document.getElementById('commuterPass').selectedIndex = 0;
-            document.getElementById('facultyStaffPass').selectedIndex = 0;
-            document.getElementById('auburnFacultyStaffPass').selectedIndex = 0;
-            document.getElementById('auburnStudentPass').selectedIndex = 0;
-            
-            if (this.value === 'ua-birmingham' || this.value === 'ua-tuscaloosa' || this.value === 'ua-huntsville' || this.value === 'auburn') {
+                document.getElementById('commuterPass').selectedIndex = 0;
+            } else if (this.value === 'auburn') {
                 userTypeSection.style.display = 'block';
+                // For Auburn, ensure downstream dropdowns are hidden/reset by default
+                studentTypeSection.style.display = 'none';
+                parkingPassSection.style.display = 'none';
+                auburnFacultyStaffSection.style.display = 'none';
+                auburnStudentPassSection.style.display = 'none';
+                document.getElementById('userType').selectedIndex = 0;
+                document.getElementById('studentType').selectedIndex = 0;
+                document.getElementById('parkingPass').selectedIndex = 0;
+                document.getElementById('commuterPass').selectedIndex = 0;
+                document.getElementById('auburnFacultyStaffPass').selectedIndex = 0;
+                document.getElementById('auburnStudentPass').selectedIndex = 0;
             } else {
                 userTypeSection.style.display = 'none';
+                studentTypeSection.style.display = 'none';
+                parkingPassSection.style.display = 'none';
+                auburnFacultyStaffSection.style.display = 'none';
+                auburnStudentPassSection.style.display = 'none';
+                // Reset selections when hidden
+                document.getElementById('userType').selectedIndex = 0;
+                document.getElementById('studentType').selectedIndex = 0;
+                document.getElementById('parkingPass').selectedIndex = 0;
+                document.getElementById('auburnFacultyStaffPass').selectedIndex = 0;
+                document.getElementById('auburnStudentPass').selectedIndex = 0;
             }
         });
 
@@ -204,42 +211,49 @@
             const auburnStudentPassSection = document.getElementById('auburnStudentPassSection');
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             
-            // Hide all sections first
+            if (this.value === 'student') {
+                studentTypeSection.style.display = 'block';
+                facultyStaffSection.style.display = 'none';
+                auburnFacultyStaffSection.style.display = 'none';
+                auburnStudentPassSection.style.display = 'none';
+                // For UAH, do not show any dropdowns after commuter/residential
+                if (destination === 'ua-huntsville') {
+                    parkingPassSection.style.display = 'none';
+                    commuterPassSection.style.display = 'none';
+                }
+                // For Auburn, show student pass selection directly
+                else if (destination === 'auburn') {
+                    auburnStudentPassSection.style.display = 'block';
+                    studentTypeSection.style.display = 'none';
+                    parkingPassSection.style.display = 'none';
+                    commuterPassSection.style.display = 'none';
+                }
+            } else if (this.value === 'faculty-staff') {
+                facultyStaffSection.style.display = 'block';
+                studentTypeSection.style.display = 'none';
+                parkingPassSection.style.display = 'none';
+                commuterPassSection.style.display = 'none';
+                auburnStudentPassSection.style.display = 'none';
+                // For Auburn, show Auburn-specific faculty/staff section
+                if (destination === 'auburn') {
+                    auburnFacultyStaffSection.style.display = 'block';
+                    facultyStaffSection.style.display = 'none';
+                }
+            } else {
                 studentTypeSection.style.display = 'none';
                 parkingPassSection.style.display = 'none';
                 commuterPassSection.style.display = 'none';
                 facultyStaffSection.style.display = 'none';
-            auburnFacultyStaffSection.style.display = 'none';
-            auburnStudentPassSection.style.display = 'none';
+                auburnFacultyStaffSection.style.display = 'none';
+                auburnStudentPassSection.style.display = 'none';
                 imageDisplaySection.style.display = 'none';
-            
-            // Reset selections
+                // Reset selections when hidden
                 document.getElementById('studentType').selectedIndex = 0;
                 document.getElementById('parkingPass').selectedIndex = 0;
                 document.getElementById('commuterPass').selectedIndex = 0;
                 document.getElementById('facultyStaffPass').selectedIndex = 0;
-            document.getElementById('auburnFacultyStaffPass').selectedIndex = 0;
-            document.getElementById('auburnStudentPass').selectedIndex = 0;
-            
-            if (this.value === 'student') {
-                if (destination === 'auburn') {
-                    // For Auburn, show student pass selection directly
-                    auburnStudentPassSection.style.display = 'block';
-                } else if (destination === 'ua-huntsville') {
-                    // For UAH, show residential/commuter selection
-                    studentTypeSection.style.display = 'block';
-                } else {
-                    // For UAB and UA Tuscaloosa, show residential/commuter selection
-                    studentTypeSection.style.display = 'block';
-                }
-            } else if (this.value === 'faculty-staff') {
-                if (destination === 'auburn') {
-                    // For Auburn, show Auburn-specific faculty/staff section
-                    auburnFacultyStaffSection.style.display = 'block';
-                } else {
-                    // For other schools, show regular faculty/staff section
-                    facultyStaffSection.style.display = 'block';
-                }
+                document.getElementById('auburnFacultyStaffPass').selectedIndex = 0;
+                document.getElementById('auburnStudentPass').selectedIndex = 0;
             }
         });
 
@@ -250,39 +264,34 @@
             const facultyStaffSection = document.getElementById('facultyStaffSection');
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             
-            // Hide all sections first
+            // For UAH, stop here: do not show further dropdowns after commuter/residential
+            if (destination === 'ua-huntsville') {
                 parkingPassSection.style.display = 'none';
                 commuterPassSection.style.display = 'none';
                 facultyStaffSection.style.display = 'none';
                 imageDisplaySection.style.display = 'none';
+                document.getElementById('parkingPass').selectedIndex = 0;
+                document.getElementById('commuterPass').selectedIndex = 0;
+                return;
+            }
             
-            // Reset selections
+            if (this.value === 'residential') {
+                parkingPassSection.style.display = 'block';
+                commuterPassSection.style.display = 'none';
+                facultyStaffSection.style.display = 'none';
+            } else if (this.value === 'commuter') {
+                commuterPassSection.style.display = 'block';
+                parkingPassSection.style.display = 'none';
+                facultyStaffSection.style.display = 'none';
+            } else {
+                parkingPassSection.style.display = 'none';
+                commuterPassSection.style.display = 'none';
+                facultyStaffSection.style.display = 'none';
+                imageDisplaySection.style.display = 'none';
+                // Reset selections when hidden
                 document.getElementById('parkingPass').selectedIndex = 0;
                 document.getElementById('commuterPass').selectedIndex = 0;
                 document.getElementById('facultyStaffPass').selectedIndex = 0;
-            
-            if (this.value === 'residential') {
-                if (destination === 'ua-birmingham') {
-                    // UAB residential students get zone-based parking
-                    parkingPassSection.style.display = 'block';
-                } else if (destination === 'ua-tuscaloosa') {
-                    // UA Tuscaloosa residential students get color-based parking
-                    parkingPassSection.style.display = 'block';
-                } else if (destination === 'ua-huntsville') {
-                    // UAH residential students don't need further selection - handled in form submission
-                    // No additional dropdown needed
-                }
-            } else if (this.value === 'commuter') {
-                if (destination === 'ua-birmingham') {
-                    // UAB commuter students get zone-based parking
-                    commuterPassSection.style.display = 'block';
-                } else if (destination === 'ua-tuscaloosa') {
-                    // UA Tuscaloosa commuter students get commuter-specific parking
-                    commuterPassSection.style.display = 'block';
-                } else if (destination === 'ua-huntsville') {
-                    // UAH commuter students don't need further selection - handled in form submission
-                    // No additional dropdown needed
-                }
             }
         });
 
@@ -352,166 +361,115 @@
             parkingImage9.style.display = 'none';
             imageSource.style.display = 'none';
             
-            // Show parking image based on school and selected pass
-            if (destination === 'ua-birmingham') {
-                // UAB-specific parking logic
-            if (parkingPass === 'FallSpring – Zone A or Zone H') {
-                    parkingImage.src = '../Images/FallSpring – Zone A or Zone H1.jpeg';
-                    parkingImage2.src = '../Images/FallSpring – Zone A or Zone H2.jpeg';
+            // Auburn-specific parking logic (check first to avoid conflicts)
+            if (destination === 'auburn' && userType === 'student' && auburnStudentPass) {
+                const passDisplayName = auburnStudentPass.toUpperCase();
+                document.querySelector('#imageDisplaySection h4').textContent = `Auburn ${passDisplayName} Parking Map`;
+                
+                // Display appropriate Auburn student parking image
+                if (auburnStudentPass === 'c-zone') {
+                    parkingImage.src = '../Images/Auburn C-zone.png';
+                } else if (auburnStudentPass === 'pc') {
+                    parkingImage.src = '../Images/Auburn PC zone.png';
+                } else if (auburnStudentPass === 'rd') {
+                    parkingImage.src = '../Images/Auburn RD zone.png';
+                } else if (auburnStudentPass === 'rh') {
+                    parkingImage.src = '../Images/Auburn RH zone.png';
+                } else if (auburnStudentPass === 'ro') {
+                    parkingImage.src = '../Images/Auburn RO zone.png';
+                } else if (auburnStudentPass === 'rw') {
+                    parkingImage.src = '../Images/Auburn RW zone.png';
+                }
+                imageDisplaySection.style.display = 'block';
+            } else if (destination === 'auburn' && userType === 'faculty-staff' && auburnFacultyStaffPass) {
+                const passDisplayName = auburnFacultyStaffPass.toUpperCase();
+                document.querySelector('#imageDisplaySection h4').textContent = `Auburn ${passDisplayName} Parking Map`;
+                
+                // Display appropriate Auburn faculty/staff parking image
+                if (auburnFacultyStaffPass === 'a-zone') {
+                    parkingImage.src = '../Images/Auburn A-zone.png';
+                } else if (auburnFacultyStaffPass === 'b-zone') {
+                    parkingImage.src = '../Images/Auburn B-zone.png';
+                }
+                imageDisplaySection.style.display = 'block';
+            // UAH-specific: show residential images without using pass selection
+            } else if (destination === 'ua-huntsville' && userType === 'student' && studentType === 'residential') {
+                parkingImage.src = '../Images/ParkingKey.jpg';
+                parkingImage2.src = '../Images/ResParking 1.jpg';
+                parkingImage3.src = '../Images/ResParking2.jpg';
                 parkingImage2.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone A/H Parking Map (Fall/Spring)';
+                parkingImage3.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'UAH Residential Parking';
                 imageDisplaySection.style.display = 'block';
-            } else if (parkingPass === 'Fall (only) – Zone A or Zone H') {
-                    parkingImage.src = '../Images/Fall (only) – Zone A or Zone H1.jpeg';
-                    parkingImage2.src = '../Images/Fall (only) – Zone A or Zone H2.jpeg';
+                imageSource.style.display = 'block';
+            // UAH-specific: show commuter images without using pass selection
+            } else if (destination === 'ua-huntsville' && userType === 'student' && studentType === 'commuter') {
+                parkingImage.src = '../Images/ParkingKey.jpg';
+                parkingImage2.src = '../Images/ComParking 1.jpg';
+                parkingImage3.src = '../Images/ComParking 2.jpg';
                 parkingImage2.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone A/H Parking Map (Fall Only)';
+                parkingImage3.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'UAH Commuter Parking';
                 imageDisplaySection.style.display = 'block';
-            } else if (parkingPass === 'FallSpring – Zone D9A') {
-                parkingImage.src = '../Images/FallSpring – Zone D9A.jpeg';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone D9A Parking Map';
+                imageSource.style.display = 'block';
+            // Show parking image based on selected pass
+            } else if (parkingPass === 'orange') {
+                parkingImage.src = '../Images/Orange Parking.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Orange Parking Map';
                 imageDisplaySection.style.display = 'block';
-            } else if (parkingPass === 'FallSpring – Zone B') {
-                parkingImage.src = '../Images/FallSpring – Zone B.jpeg';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone B Parking Map (Fall/Spring)';
+            } else if (parkingPass === 'silver') {
+                parkingImage.src = '../Images/Silver Parking.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Silver Parking Map';
                 imageDisplaySection.style.display = 'block';
-            } else if (parkingPass === 'Fall (only) – Zone B') {
-                parkingImage.src = '../Images/Fall (only) – Zone B.jpeg';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone B Parking Map (Fall Only)';
+            } else if (parkingPass === 'tan') {
+                parkingImage.src = '../Images/Tan Parking.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Tan Parking Map';
                 imageDisplaySection.style.display = 'block';
-            } else if (parkingPass === 'FallSpring – Zone D, E, F, G') {
-                    parkingImage.src = '../Images/FallSpring – Zone D, E, F, G1.jpeg';
-                    parkingImage2.src = '../Images/FallSpring – Zone D, E, F, G2.jpeg';
-                    parkingImage3.src = '../Images/FallSpring – Zone D, E, F, G3.jpeg';
-                    parkingImage4.src = '../Images/FallSpring – Zone D, E, F, G4.jpeg';
+            } else if (parkingPass === 'yellow') {
+                parkingImage.src = '../Images/Yellow Parking1.png';
+                parkingImage2.src = '../Images/Yellow Parking2.png';
+                parkingImage2.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Yellow Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (commuterPass === 'east-commuter') {
+                parkingImage.src = '../Images/East Commuter.png';
+                parkingImage2.src = '../Images/East Commuter2.png';
+                parkingImage3.src = '../Images/East Commuter3.png';
+                parkingImage4.src = '../Images/East Commuter4.png';
+                parkingImage5.src = '../Images/East Commuter5.png';
                 parkingImage2.style.display = 'block';
                 parkingImage3.style.display = 'block';
                 parkingImage4.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone D, E, F, G Parking Map (Fall/Spring)';
+                parkingImage5.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'East Commuter Parking Map';
                 imageDisplaySection.style.display = 'block';
-            } else if (commuterPass === 'Fall (only) – Zone D, E, F, G') {
-                    parkingImage.src = '../Images/Fall (only) – Zone D, E, F, G1.jpeg';
-                    parkingImage2.src = '../Images/Fall (only) – Zone D, E, F, G2.jpeg';
-                    parkingImage3.src = '../Images/Fall (only) – Zone D, E, F, G3.jpeg';
-                    parkingImage4.src = '../Images/Fall (only) – Zone D, E, F, G4.jpeg';
+            } else if (commuterPass === 'west-commuter') {
+                parkingImage.src = '../Images/West Commuter.png';
+                document.querySelector('#imageDisplaySection h4').textContent = 'West Commuter Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (destination === 'ua-huntsville' && userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
+                parkingImage.src = '../Images/ParkingKey.jpg';
+                parkingImage2.src = '../Images/FacParking 1.jpg';
+                parkingImage3.src = '../Images/FacParking 2.jpg';
                 parkingImage2.style.display = 'block';
                 parkingImage3.style.display = 'block';
-                parkingImage4.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone D, E, F, G Parking Map (Fall Only)';
+                document.querySelector('#imageDisplaySection h4').textContent = 'UAH Faculty/Staff Parking';
                 imageDisplaySection.style.display = 'block';
-            } else if (commuterPass === 'FallSpring – Zone C') {
-                parkingImage.src = '../Images/FallSpring – Zone C.jpeg';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone C Parking Map (Fall/Spring)';
-                imageDisplaySection.style.display = 'block';
-            } else if (commuterPass === 'Fall (only) – Zone C') {
-                parkingImage.src = '../Images/Fall (only) – Zone C.jpeg';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone C Parking Map (Fall Only)';
-                imageDisplaySection.style.display = 'block';
+                imageSource.style.display = 'block';
             } else if (facultyStaffPass === 'fs-parking') {
                 parkingImage.src = '../Images/FS Parking.png';
-                    parkingImage2.src = '../Images/FS Parking2.png';
-                    parkingImage3.src = '../Images/FS Parking3.png';
-                    parkingImage4.src = '../Images/FS Parking4.png';
-                    parkingImage5.src = '../Images/FS Parking5.png';
-                    parkingImage6.src = '../Images/FS Parking6.png';
-                    parkingImage2.style.display = 'block';
-                    parkingImage3.style.display = 'block';
-                    parkingImage4.style.display = 'block';
-                    parkingImage5.style.display = 'block';
-                    parkingImage6.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Faculty/Staff Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                }
-            } else if (destination === 'ua-tuscaloosa') {
-                // UA Tuscaloosa-specific parking logic
-                if (parkingPass === 'orange') {
-                    parkingImage.src = '../Images/Orange Parking.png';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Orange Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'silver') {
-                    parkingImage.src = '../Images/Silver Parking.png';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Silver Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'tan') {
-                    parkingImage.src = '../Images/Tan Parking.png';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Tan Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'yellow') {
-                    parkingImage.src = '../Images/Yellow Parking1.png';
-                    parkingImage2.src = '../Images/Yellow Parking2.png';
-                    parkingImage2.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Yellow Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                } else if (commuterPass === 'east-commuter') {
-                    parkingImage.src = '../Images/East Commuter.png';
-                    parkingImage2.src = '../Images/East Commuter2.png';
-                    parkingImage3.src = '../Images/East Commuter3.png';
-                    parkingImage4.src = '../Images/East Commuter4.png';
-                    parkingImage5.src = '../Images/East Commuter5.png';
-                    parkingImage2.style.display = 'block';
-                    parkingImage3.style.display = 'block';
-                    parkingImage4.style.display = 'block';
-                    parkingImage5.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa East Commuter Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                } else if (commuterPass === 'west-commuter') {
-                    parkingImage.src = '../Images/West Commuter.png';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa West Commuter Parking Map';
-                    imageDisplaySection.style.display = 'block';
-                }
-            } else if (destination === 'ua-huntsville') {
-                // UAH-specific parking logic
-                if (userType === 'student' && studentType === 'residential') {
-                    parkingImage.src = '../Images/ParkingKey.jpg';
-                    parkingImage2.src = '../Images/ResParking 1.jpg';
-                    parkingImage3.src = '../Images/ResParking2.jpg';
-                    parkingImage2.style.display = 'block';
-                    parkingImage3.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAH Residential Parking';
-                    imageDisplaySection.style.display = 'block';
-                    imageSource.style.display = 'block';
-                } else if (userType === 'student' && studentType === 'commuter') {
-                    parkingImage.src = '../Images/ParkingKey.jpg';
-                    parkingImage2.src = '../Images/ComParking 1.jpg';
-                    parkingImage3.src = '../Images/ComParking 2.jpg';
-                    parkingImage2.style.display = 'block';
-                    parkingImage3.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAH Commuter Parking';
-                    imageDisplaySection.style.display = 'block';
-                    imageSource.style.display = 'block';
-                } else if (userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
-                    parkingImage.src = '../Images/ParkingKey.jpg';
-                    parkingImage2.src = '../Images/FacParking 1.jpg';
-                    parkingImage3.src = '../Images/FacParking 2.jpg';
-                    parkingImage2.style.display = 'block';
-                    parkingImage3.style.display = 'block';
-                    document.querySelector('#imageDisplaySection h4').textContent = 'UAH Faculty/Staff Parking';
-                    imageDisplaySection.style.display = 'block';
-                    imageSource.style.display = 'block';
-                }
-            } else if (destination === 'auburn') {
-                // Auburn-specific parking logic
-                if (userType === 'student' && auburnStudentPass) {
-                    const passDisplayName = auburnStudentPass.toUpperCase();
-                    document.querySelector('#imageDisplaySection h4').textContent = `Auburn ${passDisplayName} Parking Map`;
-
-                    if (auburnStudentPass === 'c-zone') parkingImage.src = '../Images/Auburn C-zone.png';
-                    else if (auburnStudentPass === 'pc') parkingImage.src = '../Images/Auburn PC zone.png';
-                    else if (auburnStudentPass === 'rd') parkingImage.src = '../Images/Auburn RD zone.png';
-                    else if (auburnStudentPass === 'rh') parkingImage.src = '../Images/Auburn RH zone.png';
-                    else if (auburnStudentPass === 'ro') parkingImage.src = '../Images/Auburn RO zone.png';
-                    else if (auburnStudentPass === 'rw') parkingImage.src = '../Images/Auburn RW zone.png';
-                    
-                    imageDisplaySection.style.display = 'block';
-                } else if (userType === 'faculty-staff' && auburnFacultyStaffPass) {
-                    const passDisplayName = auburnFacultyStaffPass.toUpperCase();
-                    document.querySelector('#imageDisplaySection h4').textContent = `Auburn ${passDisplayName} Parking Map`;
-
-                    if (auburnFacultyStaffPass === 'a-zone') parkingImage.src = '../Images/Auburn A-zone.png';
-                    else if (auburnFacultyStaffPass === 'b-zone') parkingImage.src = '../Images/Auburn B-zone.png';
-
+                parkingImage2.src = '../Images/FS Parking2.png';
+                parkingImage3.src = '../Images/FS Parking3.png';
+                parkingImage4.src = '../Images/FS Parking4.png';
+                parkingImage5.src = '../Images/FS Parking5.png';
+                parkingImage6.src = '../Images/FS Parking6.png';
+                parkingImage2.style.display = 'block';
+                parkingImage3.style.display = 'block';
+                parkingImage4.style.display = 'block';
+                parkingImage5.style.display = 'block';
+                parkingImage6.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'Faculty/Staff Parking Map';
                 imageDisplaySection.style.display = 'block';
-                }
             } else {
                 imageDisplaySection.style.display = 'none';
             }
