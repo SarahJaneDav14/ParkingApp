@@ -81,6 +81,12 @@
                                     <option value="FallSpring – Zone B">Fall/Spring Zone B</option>
                                     <option value="Fall (only) – Zone B">Fall (only) Zone B</option>
                                     <option value="FallSpring – Zone D, E, F, G">Fall/Spring Zone D, E, F, G</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="tuscaloosaParkingPassSection" style="display: none;">
+                                <label for="tuscaloosaParkingPass" class="form-label">Which parking pass do you have?</label>
+                                <select class="form-select" id="tuscaloosaParkingPass">
+                                    <option value="" selected disabled>Select your parking pass</option>
                                     <!-- UA Tuscaloosa Color-based options -->
                                     <option value="orange">Orange</option>
                                     <option value="silver">Silver</option>
@@ -173,6 +179,7 @@
             const userTypeSection = document.getElementById('userTypeSection');
             const studentTypeSection = document.getElementById('studentTypeSection');
             const parkingPassSection = document.getElementById('parkingPassSection');
+            const tuscaloosaParkingPassSection = document.getElementById('tuscaloosaParkingPassSection');
             const commuterPassSection = document.getElementById('commuterPassSection');
             const tuscaloosaCommuterPassSection = document.getElementById('tuscaloosaCommuterPassSection');
             const facultyStaffSection = document.getElementById('facultyStaffSection');
@@ -183,6 +190,7 @@
             // Hide all sections first
             studentTypeSection.style.display = 'none';
             parkingPassSection.style.display = 'none';
+            tuscaloosaParkingPassSection.style.display = 'none';
             commuterPassSection.style.display = 'none';
             tuscaloosaCommuterPassSection.style.display = 'none';
             facultyStaffSection.style.display = 'none';
@@ -194,6 +202,7 @@
             document.getElementById('userType').selectedIndex = 0;
             document.getElementById('studentType').selectedIndex = 0;
             document.getElementById('parkingPass').selectedIndex = 0;
+            document.getElementById('tuscaloosaParkingPass').selectedIndex = 0;
             document.getElementById('commuterPass').selectedIndex = 0;
             document.getElementById('tuscaloosaCommuterPass').selectedIndex = 0;
             document.getElementById('facultyStaffPass').selectedIndex = 0;
@@ -211,6 +220,7 @@
             const destination = document.getElementById('destination').value;
             const studentTypeSection = document.getElementById('studentTypeSection');
             const parkingPassSection = document.getElementById('parkingPassSection');
+            const tuscaloosaParkingPassSection = document.getElementById('tuscaloosaParkingPassSection');
             const commuterPassSection = document.getElementById('commuterPassSection');
             const tuscaloosaCommuterPassSection = document.getElementById('tuscaloosaCommuterPassSection');
             const facultyStaffSection = document.getElementById('facultyStaffSection');
@@ -221,6 +231,7 @@
             // Hide all sections first
             studentTypeSection.style.display = 'none';
             parkingPassSection.style.display = 'none';
+            tuscaloosaParkingPassSection.style.display = 'none';
             commuterPassSection.style.display = 'none';
             tuscaloosaCommuterPassSection.style.display = 'none';
             facultyStaffSection.style.display = 'none';
@@ -231,6 +242,7 @@
             // Reset selections
             document.getElementById('studentType').selectedIndex = 0;
             document.getElementById('parkingPass').selectedIndex = 0;
+            document.getElementById('tuscaloosaParkingPass').selectedIndex = 0;
             document.getElementById('commuterPass').selectedIndex = 0;
             document.getElementById('tuscaloosaCommuterPass').selectedIndex = 0;
             document.getElementById('facultyStaffPass').selectedIndex = 0;
@@ -262,6 +274,7 @@
         document.getElementById('studentType').addEventListener('change', function() {
             const destination = document.getElementById('destination').value;
             const parkingPassSection = document.getElementById('parkingPassSection');
+            const tuscaloosaParkingPassSection = document.getElementById('tuscaloosaParkingPassSection');
             const commuterPassSection = document.getElementById('commuterPassSection');
             const tuscaloosaCommuterPassSection = document.getElementById('tuscaloosaCommuterPassSection');
             const facultyStaffSection = document.getElementById('facultyStaffSection');
@@ -269,6 +282,7 @@
             
             // Hide all sections first
             parkingPassSection.style.display = 'none';
+            tuscaloosaParkingPassSection.style.display = 'none';
             commuterPassSection.style.display = 'none';
             tuscaloosaCommuterPassSection.style.display = 'none';
             facultyStaffSection.style.display = 'none';
@@ -276,6 +290,7 @@
             
             // Reset selections
             document.getElementById('parkingPass').selectedIndex = 0;
+            document.getElementById('tuscaloosaParkingPass').selectedIndex = 0;
             document.getElementById('commuterPass').selectedIndex = 0;
             document.getElementById('tuscaloosaCommuterPass').selectedIndex = 0;
             document.getElementById('facultyStaffPass').selectedIndex = 0;
@@ -286,7 +301,7 @@
                     parkingPassSection.style.display = 'block';
                 } else if (destination === 'ua-tuscaloosa') {
                     // UA Tuscaloosa residential students get color-based parking
-                    parkingPassSection.style.display = 'block';
+                    tuscaloosaParkingPassSection.style.display = 'block';
                 } else if (destination === 'ua-huntsville') {
                     // UAH residential students don't need further selection - handled in form submission
                     // No additional dropdown needed
@@ -308,6 +323,12 @@
         document.getElementById('parkingPass').addEventListener('change', function() {
             const imageDisplaySection = document.getElementById('imageDisplaySection');
             // Hide image when parking pass changes
+            imageDisplaySection.style.display = 'none';
+        });
+
+        document.getElementById('tuscaloosaParkingPass').addEventListener('change', function() {
+            const imageDisplaySection = document.getElementById('imageDisplaySection');
+            // Hide image when Tuscaloosa parking pass changes
             imageDisplaySection.style.display = 'none';
         });
 
@@ -349,6 +370,7 @@
             const userType = document.getElementById('userType').value;
             const studentType = document.getElementById('studentType').value;
             const parkingPass = document.getElementById('parkingPass').value;
+            const tuscaloosaParkingPass = document.getElementById('tuscaloosaParkingPass').value;
             const commuterPass = document.getElementById('commuterPass').value;
             const tuscaloosaCommuterPass = document.getElementById('tuscaloosaCommuterPass').value;
             const facultyStaffPass = document.getElementById('facultyStaffPass').value;
@@ -439,19 +461,19 @@
                 }
             } else if (destination === 'ua-tuscaloosa') {
                 // UA Tuscaloosa-specific parking logic
-                if (parkingPass === 'orange') {
+                if (tuscaloosaParkingPass === 'orange') {
                     parkingImage.src = '../Images/Orange Parking.png';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Orange Parking Map';
                     imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'silver') {
+                } else if (tuscaloosaParkingPass === 'silver') {
                     parkingImage.src = '../Images/Silver Parking.png';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Silver Parking Map';
                     imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'tan') {
+                } else if (tuscaloosaParkingPass === 'tan') {
                     parkingImage.src = '../Images/Tan Parking.png';
                     document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Tan Parking Map';
                     imageDisplaySection.style.display = 'block';
-                } else if (parkingPass === 'yellow') {
+                } else if (tuscaloosaParkingPass === 'yellow') {
                     parkingImage.src = '../Images/Yellow Parking1.png';
                     parkingImage2.src = '../Images/Yellow Parking2.png';
                     parkingImage2.style.display = 'block';
@@ -541,24 +563,6 @@
 
                     imageDisplaySection.style.display = 'block';
                 }
-            } else if (parkingPass === 'orange') {
-                parkingImage.src = '../Images/Orange Parking.png';
-                document.querySelector('#imageDisplaySection h4').textContent = 'Orange Parking Map';
-                imageDisplaySection.style.display = 'block';
-            } else if (parkingPass === 'silver') {
-                parkingImage.src = '../Images/Silver Parking.png';
-                document.querySelector('#imageDisplaySection h4').textContent = 'Silver Parking Map';
-                imageDisplaySection.style.display = 'block';
-            } else if (parkingPass === 'tan') {
-                parkingImage.src = '../Images/Tan Parking.png';
-                document.querySelector('#imageDisplaySection h4').textContent = 'Tan Parking Map';
-                imageDisplaySection.style.display = 'block';
-            } else if (parkingPass === 'yellow') {
-                parkingImage.src = '../Images/Yellow Parking1.png';
-                parkingImage2.src = '../Images/Yellow Parking2.png';
-                parkingImage2.style.display = 'block';
-                document.querySelector('#imageDisplaySection h4').textContent = 'Yellow Parking Map';
-                imageDisplaySection.style.display = 'block';
             } else if (destination === 'ua-huntsville' && userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
                 parkingImage.src = '../Images/ParkingKey.jpg';
                 parkingImage2.src = '../Images/FacParking 1.jpg';
