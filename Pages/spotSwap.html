@@ -117,10 +117,26 @@
                                     <option value="auburn">Auburn</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="givingLocation" class="form-label">Spot Location</label>
-                                <select class="form-select" id="givingLocation" disabled>
-                                    <option selected>Select campus first...</option>
+                            <div class="mb-3" id="givingUserTypeSection" style="display: none;">
+                                <label for="givingUserType" class="form-label">Are you a student or faculty/staff?</label>
+                                <select class="form-select" id="givingUserType">
+                                    <option value="" selected disabled>Select your status</option>
+                                    <option value="student">Student</option>
+                                    <option value="faculty-staff">Faculty/Staff</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="givingStudentTypeSection" style="display: none;">
+                                <label for="givingStudentType" class="form-label">Are you a commuter or residential student?</label>
+                                <select class="form-select" id="givingStudentType">
+                                    <option value="" selected disabled>Select your student type</option>
+                                    <option value="commuter">Commuter</option>
+                                    <option value="residential">Residential</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="givingParkingPassSection" style="display: none;">
+                                <label for="givingParkingPass" class="form-label">Which parking pass do you have?</label>
+                                <select class="form-select" id="givingParkingPass">
+                                    <option value="" selected disabled>Select your parking pass</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -182,7 +198,9 @@
             
             const accountName = document.getElementById('givingAccountName').value.trim();
             const campus = document.getElementById('givingCampus').value;
-            const location = document.getElementById('givingLocation').value;
+            const userType = document.getElementById('givingUserType').value;
+            const studentType = document.getElementById('givingStudentType').value;
+            const parkingPass = document.getElementById('givingParkingPass').value;
             const timeWait = document.getElementById('givingTime').value;
             const message = document.getElementById('givingMessage').value.trim();
             
@@ -213,8 +231,20 @@
                 return;
             }
             
-            if (!location || location === 'Select campus first...' || location === 'Choose location...') {
-                accountErrorText.textContent = 'Please select a parking location.';
+            if (!userType) {
+                accountErrorText.textContent = 'Please select whether you are a student or faculty/staff.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            if (userType === 'student' && campus !== 'auburn' && !studentType) {
+                accountErrorText.textContent = 'Please select whether you are a commuter or residential student.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            if (!parkingPass) {
+                accountErrorText.textContent = 'Please select your parking pass.';
                 accountError.style.display = 'block';
                 return;
             }
@@ -226,13 +256,14 @@
             }
             
             // If all validations pass, store spot data and start countdown timer
-            storeSpotData(accountName, campus, location, timeWait, message);
+            storeSpotData(accountName, campus, parkingPass, timeWait, message);
             startCountdown(parseInt(timeWait));
             
             // Reset form
             this.reset();
-            document.getElementById('givingLocation').disabled = true;
-            document.getElementById('givingLocation').innerHTML = '<option selected>Select campus first...</option>';
+            document.getElementById('givingUserTypeSection').style.display = 'none';
+            document.getElementById('givingStudentTypeSection').style.display = 'none';
+            document.getElementById('givingParkingPassSection').style.display = 'none';
         });
 
         // Handle form submission for looking for a spot
@@ -342,6 +373,57 @@
             if (studentType === 'residential' || studentType === 'commuter') {
                 // Show parking pass selection
                 updateLookingParkingPasses(campus, userType, studentType);
+            }
+        });
+
+        // Handle user type change for giving up a spot
+        document.getElementById('givingUserType').addEventListener('change', function() {
+            const campus = document.getElementById('givingCampus').value;
+            const userType = this.value;
+            const studentTypeSection = document.getElementById('givingStudentTypeSection');
+            const parkingPassSection = document.getElementById('givingParkingPassSection');
+            
+            // Hide all sections first
+            studentTypeSection.style.display = 'none';
+            parkingPassSection.style.display = 'none';
+            
+            // Reset selections
+            document.getElementById('givingStudentType').selectedIndex = 0;
+            document.getElementById('givingParkingPass').selectedIndex = 0;
+            
+            if (userType === 'student') {
+                if (campus === 'auburn') {
+                    // For Auburn, show parking pass selection directly
+                    updateGivingParkingPasses(campus, userType, '');
+                } else if (campus === 'ua-huntsville') {
+                    // For UAH, show residential/commuter selection
+                    studentTypeSection.style.display = 'block';
+                } else {
+                    // For UAB and UA Tuscaloosa, show residential/commuter selection
+                    studentTypeSection.style.display = 'block';
+                }
+            } else if (userType === 'faculty-staff') {
+                // Show faculty/staff parking pass selection
+                updateGivingParkingPasses(campus, userType, '');
+            }
+        });
+
+        // Handle student type change for giving up a spot
+        document.getElementById('givingStudentType').addEventListener('change', function() {
+            const campus = document.getElementById('givingCampus').value;
+            const userType = document.getElementById('givingUserType').value;
+            const studentType = this.value;
+            const parkingPassSection = document.getElementById('givingParkingPassSection');
+            
+            // Hide parking pass section first
+            parkingPassSection.style.display = 'none';
+            
+            // Reset selection
+            document.getElementById('givingParkingPass').selectedIndex = 0;
+            
+            if (studentType === 'residential' || studentType === 'commuter') {
+                // Show parking pass selection
+                updateGivingParkingPasses(campus, userType, studentType);
             }
         });
 
@@ -462,62 +544,120 @@
             }
         }
 
+        // Function to update parking passes for giving up a spot
+        function updateGivingParkingPasses(campus, userType, studentType) {
+            const parkingPassSection = document.getElementById('givingParkingPassSection');
+            const parkingPassSelect = document.getElementById('givingParkingPass');
+            
+            // Clear existing options
+            parkingPassSelect.innerHTML = '<option value="" selected disabled>Select your parking pass</option>';
+            
+            // Show parking pass section
+            parkingPassSection.style.display = 'block';
+            
+            // Add options based on campus, user type, and student type
+            if (campus === 'ua-birmingham') {
+                if (userType === 'student' && studentType === 'residential') {
+                    // UAB residential students get zone-based parking
+                    parkingPassSelect.innerHTML += `
+                        <option value="FallSpring – Zone A or Zone H">Fall/Spring Zone A or Zone H</option>
+                        <option value="Fall (only) – Zone A or Zone H">Fall (only) Zone A or Zone H</option>
+                        <option value="FallSpring – Zone D9A">Fall/Spring Zone D9A</option>
+                        <option value="FallSpring – Zone B">Fall/Spring Zone B</option>
+                        <option value="Fall (only) – Zone B">Fall (only) Zone B</option>
+                        <option value="FallSpring – Zone D, E, F, G">Fall/Spring Zone D, E, F, G</option>
+                    `;
+                } else if (userType === 'student' && studentType === 'commuter') {
+                    // UAB commuter students get zone-based parking
+                    parkingPassSelect.innerHTML += `
+                        <option value="Fall (only) – Zone D, E, F, G">Fall (only) Zone D, E, F, G</option>
+                        <option value="FallSpring – Zone C">Fall/Spring Zone C</option>
+                        <option value="Fall (only) – Zone C">Fall (only) Zone C</option>
+                    `;
+                } else if (userType === 'faculty-staff') {
+                    // UAB faculty/staff
+                    parkingPassSelect.innerHTML += `
+                        <option value="fs-parking">FS Parking</option>
+                    `;
+                }
+            } else if (campus === 'ua-tuscaloosa') {
+                if (userType === 'student' && studentType === 'residential') {
+                    // UA Tuscaloosa residential students get color-based parking
+                    parkingPassSelect.innerHTML += `
+                        <option value="orange">Orange</option>
+                        <option value="silver">Silver</option>
+                        <option value="tan">Tan</option>
+                        <option value="yellow">Yellow</option>
+                    `;
+                } else if (userType === 'student' && studentType === 'commuter') {
+                    // UA Tuscaloosa commuter students get commuter-specific parking
+                    parkingPassSelect.innerHTML += `
+                        <option value="east-commuter">East Commuter</option>
+                        <option value="west-commuter">West Commuter</option>
+                    `;
+                } else if (userType === 'faculty-staff') {
+                    // UA Tuscaloosa faculty/staff
+                    parkingPassSelect.innerHTML += `
+                        <option value="fs-parking">FS Parking</option>
+                    `;
+                }
+            } else if (campus === 'ua-huntsville') {
+                if (userType === 'student' && studentType === 'residential') {
+                    // UAH residential students
+                    parkingPassSelect.innerHTML += `
+                        <option value="residential">Residential</option>
+                    `;
+                } else if (userType === 'student' && studentType === 'commuter') {
+                    // UAH commuter students
+                    parkingPassSelect.innerHTML += `
+                        <option value="commuter">Commuter</option>
+                    `;
+                } else if (userType === 'faculty-staff') {
+                    // UAH faculty/staff
+                    parkingPassSelect.innerHTML += `
+                        <option value="faculty-staff">Faculty/Staff</option>
+                    `;
+                }
+            } else if (campus === 'auburn') {
+                if (userType === 'student') {
+                    // Auburn students
+                    parkingPassSelect.innerHTML += `
+                        <option value="c-zone">C-zone</option>
+                        <option value="pc">PC</option>
+                        <option value="rd">RD</option>
+                        <option value="rh">RH</option>
+                        <option value="ro">RO</option>
+                        <option value="rw">RW</option>
+                    `;
+                } else if (userType === 'faculty-staff') {
+                    // Auburn faculty/staff
+                    parkingPassSelect.innerHTML += `
+                        <option value="a-zone">A-zone</option>
+                        <option value="b-zone">B-zone</option>
+                    `;
+                }
+            }
+        }
+
         // Function for "Giving up a Spot" campus selection
         function updateParkingLocations() {
             const campus = document.getElementById('givingCampus').value;
-            const locationSelect = document.getElementById('givingLocation');
+            const userTypeSection = document.getElementById('givingUserTypeSection');
+            const studentTypeSection = document.getElementById('givingStudentTypeSection');
+            const parkingPassSection = document.getElementById('givingParkingPassSection');
             
-            // Clear existing options
-            locationSelect.innerHTML = '';
+            // Hide all sections first
+            userTypeSection.style.display = 'none';
+            studentTypeSection.style.display = 'none';
+            parkingPassSection.style.display = 'none';
             
-            if (campus === 'ua-tuscaloosa') {
-                locationSelect.disabled = false;
-                locationSelect.innerHTML = `
-                    <option selected>Choose location...</option>
-                    <option value="orange">Orange</option>
-                    <option value="silver">Silver</option>
-                    <option value="tan">Tan</option>
-                    <option value="yellow">Yellow</option>
-                    <option value="east-commuter">East Commuter</option>
-                    <option value="west-commuter">West Commuter</option>
-                    <option value="fs-parking">FS Parking</option>
-                `;
-            } else if (campus === 'ua-birmingham') {
-                locationSelect.disabled = false;
-                locationSelect.innerHTML = `
-                    <option selected>Choose location...</option>
-                    <option value="orange">Orange</option>
-                    <option value="silver">Silver</option>
-                    <option value="tan">Tan</option>
-                    <option value="yellow">Yellow</option>
-                    <option value="east-commuter">East Commuter</option>
-                    <option value="west-commuter">West Commuter</option>
-                    <option value="fs-parking">FS Parking</option>
-                `;
-            } else if (campus === 'ua-huntsville') {
-                locationSelect.disabled = false;
-                locationSelect.innerHTML = `
-                    <option selected>Choose location...</option>
-                    <option value="residential">Residential</option>
-                    <option value="commuter">Commuter</option>
-                    <option value="faculty-staff">Faculty/Staff</option>
-                `;
-            } else if (campus === 'auburn') {
-                locationSelect.disabled = false;
-                locationSelect.innerHTML = `
-                    <option selected>Choose location...</option>
-                    <option value="a-zone">A-zone</option>
-                    <option value="b-zone">B-zone</option>
-                    <option value="c-zone">C-zone</option>
-                    <option value="pc">PC</option>
-                    <option value="rd">RD</option>
-                    <option value="rh">RH</option>
-                    <option value="ro">RO</option>
-                    <option value="rw">RW</option>
-                `;
-            } else {
-                locationSelect.disabled = true;
-                locationSelect.innerHTML = '<option selected>Select campus first...</option>';
+            // Reset all selections
+            document.getElementById('givingUserType').selectedIndex = 0;
+            document.getElementById('givingStudentType').selectedIndex = 0;
+            document.getElementById('givingParkingPass').selectedIndex = 0;
+            
+            if (campus === 'ua-birmingham' || campus === 'ua-tuscaloosa' || campus === 'ua-huntsville' || campus === 'auburn') {
+                userTypeSection.style.display = 'block';
             }
         }
 
