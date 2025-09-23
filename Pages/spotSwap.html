@@ -83,7 +83,7 @@
                                     <option value="" selected disabled>Select your parking pass</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3" id="lookingMessageSection" style="display: none;">
                                 <label for="lookingMessage" class="form-label">Message (Optional)</label>
                                 <textarea class="form-control" id="lookingMessage" rows="3" placeholder="Orange Magnolia Parking Deck"></textarea>
                             </div>
@@ -313,6 +313,7 @@
             document.getElementById('lookingUserTypeSection').style.display = 'none';
             document.getElementById('lookingStudentTypeSection').style.display = 'none';
             document.getElementById('lookingParkingPassSection').style.display = 'none';
+            document.getElementById('lookingMessageSection').style.display = 'none';
         });
 
         // Real-time account validation
@@ -333,14 +334,17 @@
             const userType = this.value;
             const studentTypeSection = document.getElementById('lookingStudentTypeSection');
             const parkingPassSection = document.getElementById('lookingParkingPassSection');
+            const messageSection = document.getElementById('lookingMessageSection');
             
             // Hide all sections first
             studentTypeSection.style.display = 'none';
             parkingPassSection.style.display = 'none';
+            messageSection.style.display = 'none';
             
             // Reset selections
             document.getElementById('lookingStudentType').selectedIndex = 0;
             document.getElementById('lookingParkingPass').selectedIndex = 0;
+            document.getElementById('lookingMessage').value = '';
             
             if (userType === 'student') {
                 if (campus === 'auburn') {
@@ -365,16 +369,34 @@
             const userType = document.getElementById('lookingUserType').value;
             const studentType = this.value;
             const parkingPassSection = document.getElementById('lookingParkingPassSection');
+            const messageSection = document.getElementById('lookingMessageSection');
             
-            // Hide parking pass section first
+            // Hide parking pass and message sections first
             parkingPassSection.style.display = 'none';
+            messageSection.style.display = 'none';
             
-            // Reset selection
+            // Reset selections
             document.getElementById('lookingParkingPass').selectedIndex = 0;
+            document.getElementById('lookingMessage').value = '';
             
             if (studentType === 'residential' || studentType === 'commuter') {
                 // Show parking pass selection
                 updateLookingParkingPasses(campus, userType, studentType);
+            }
+        });
+
+        // Handle parking pass change for looking for a spot
+        document.getElementById('lookingParkingPass').addEventListener('change', function() {
+            const messageSection = document.getElementById('lookingMessageSection');
+            
+            if (this.value && this.value !== '') {
+                // Show message section when a parking pass is selected
+                messageSection.style.display = 'block';
+            } else {
+                // Hide message section when no parking pass is selected
+                messageSection.style.display = 'none';
+                // Clear message content
+                document.getElementById('lookingMessage').value = '';
             }
         });
 
@@ -480,16 +502,19 @@
             const userTypeSection = document.getElementById('lookingUserTypeSection');
             const studentTypeSection = document.getElementById('lookingStudentTypeSection');
             const parkingPassSection = document.getElementById('lookingParkingPassSection');
+            const messageSection = document.getElementById('lookingMessageSection');
             
             // Hide all sections first
             userTypeSection.style.display = 'none';
             studentTypeSection.style.display = 'none';
             parkingPassSection.style.display = 'none';
+            messageSection.style.display = 'none';
             
             // Reset all selections
             document.getElementById('lookingUserType').selectedIndex = 0;
             document.getElementById('lookingStudentType').selectedIndex = 0;
             document.getElementById('lookingParkingPass').selectedIndex = 0;
+            document.getElementById('lookingMessage').value = '';
             
             if (campus === 'ua-birmingham' || campus === 'ua-tuscaloosa' || campus === 'ua-huntsville' || campus === 'auburn') {
                 userTypeSection.style.display = 'block';
