@@ -139,7 +139,7 @@
                                     <option value="" selected disabled>Select your parking pass</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3" id="givingTimeSection" style="display: none;">
                                 <label for="givingTime" class="form-label">Time willing to wait</label>
                                 <select class="form-select" id="givingTime">
                                     <option selected>Choose time...</option>
@@ -264,6 +264,7 @@
             document.getElementById('givingUserTypeSection').style.display = 'none';
             document.getElementById('givingStudentTypeSection').style.display = 'none';
             document.getElementById('givingParkingPassSection').style.display = 'none';
+            document.getElementById('givingTimeSection').style.display = 'none';
         });
 
         // Handle form submission for looking for a spot
@@ -382,14 +383,17 @@
             const userType = this.value;
             const studentTypeSection = document.getElementById('givingStudentTypeSection');
             const parkingPassSection = document.getElementById('givingParkingPassSection');
+            const timeSection = document.getElementById('givingTimeSection');
             
             // Hide all sections first
             studentTypeSection.style.display = 'none';
             parkingPassSection.style.display = 'none';
+            timeSection.style.display = 'none';
             
             // Reset selections
             document.getElementById('givingStudentType').selectedIndex = 0;
             document.getElementById('givingParkingPass').selectedIndex = 0;
+            document.getElementById('givingTime').selectedIndex = 0;
             
             if (userType === 'student') {
                 if (campus === 'auburn') {
@@ -414,16 +418,34 @@
             const userType = document.getElementById('givingUserType').value;
             const studentType = this.value;
             const parkingPassSection = document.getElementById('givingParkingPassSection');
+            const timeSection = document.getElementById('givingTimeSection');
             
-            // Hide parking pass section first
+            // Hide parking pass and time sections first
             parkingPassSection.style.display = 'none';
+            timeSection.style.display = 'none';
             
-            // Reset selection
+            // Reset selections
             document.getElementById('givingParkingPass').selectedIndex = 0;
+            document.getElementById('givingTime').selectedIndex = 0;
             
             if (studentType === 'residential' || studentType === 'commuter') {
                 // Show parking pass selection
                 updateGivingParkingPasses(campus, userType, studentType);
+            }
+        });
+
+        // Handle parking pass change for giving up a spot
+        document.getElementById('givingParkingPass').addEventListener('change', function() {
+            const timeSection = document.getElementById('givingTimeSection');
+            
+            if (this.value && this.value !== '') {
+                // Show time section when a parking pass is selected
+                timeSection.style.display = 'block';
+            } else {
+                // Hide time section when no parking pass is selected
+                timeSection.style.display = 'none';
+                // Reset time selection
+                document.getElementById('givingTime').selectedIndex = 0;
             }
         });
 
@@ -645,16 +667,19 @@
             const userTypeSection = document.getElementById('givingUserTypeSection');
             const studentTypeSection = document.getElementById('givingStudentTypeSection');
             const parkingPassSection = document.getElementById('givingParkingPassSection');
+            const timeSection = document.getElementById('givingTimeSection');
             
             // Hide all sections first
             userTypeSection.style.display = 'none';
             studentTypeSection.style.display = 'none';
             parkingPassSection.style.display = 'none';
+            timeSection.style.display = 'none';
             
             // Reset all selections
             document.getElementById('givingUserType').selectedIndex = 0;
             document.getElementById('givingStudentType').selectedIndex = 0;
             document.getElementById('givingParkingPass').selectedIndex = 0;
+            document.getElementById('givingTime').selectedIndex = 0;
             
             if (campus === 'ua-birmingham' || campus === 'ua-tuscaloosa' || campus === 'ua-huntsville' || campus === 'auburn') {
                 userTypeSection.style.display = 'block';
