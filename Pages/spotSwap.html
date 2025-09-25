@@ -223,6 +223,53 @@
             return accounts.some(account => account.name.toLowerCase() === accountName.toLowerCase());
         }
 
+        // Load saved account data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedAccountData();
+        });
+
+        // Function to load saved account data
+        function loadSavedAccountData() {
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser') || 'null');
+            if (currentUser) {
+                // Pre-fill giving up a spot form
+                document.getElementById('givingCampus').value = currentUser.campus || '';
+                if (currentUser.campus) {
+                    updateGivingParkingLocations();
+                    document.getElementById('givingUserType').value = currentUser.userType || '';
+                    if (currentUser.userType) {
+                        updateGivingUserType();
+                        if (currentUser.studentType) {
+                            document.getElementById('givingStudentType').value = currentUser.studentType;
+                            updateGivingStudentType();
+                        }
+                        if (currentUser.parkingPass) {
+                            document.getElementById('givingParkingPass').value = currentUser.parkingPass;
+                            updateGivingParkingPass();
+                        }
+                    }
+                }
+                
+                // Pre-fill looking for a spot form
+                document.getElementById('lookingCampus').value = currentUser.campus || '';
+                if (currentUser.campus) {
+                    updateLookingParkingLocations();
+                    document.getElementById('lookingUserType').value = currentUser.userType || '';
+                    if (currentUser.userType) {
+                        updateLookingUserType();
+                        if (currentUser.studentType) {
+                            document.getElementById('lookingStudentType').value = currentUser.studentType;
+                            updateLookingStudentType();
+                        }
+                        if (currentUser.parkingPass) {
+                            document.getElementById('lookingParkingPass').value = currentUser.parkingPass;
+                            updateLookingParkingPass();
+                        }
+                    }
+                }
+            }
+        }
+
         // Handle form submission for giving up a spot
         document.querySelector('#givingCampus').closest('form').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -784,6 +831,84 @@
                         <option value="b-zone">B-zone</option>
                     `;
                 }
+            }
+        }
+
+        // Helper functions for updating form sections
+        function updateGivingUserType() {
+            const campus = document.getElementById('givingCampus').value;
+            const userType = document.getElementById('givingUserType').value;
+            const studentTypeSection = document.getElementById('givingStudentTypeSection');
+            const parkingPassSection = document.getElementById('givingParkingPassSection');
+            const timeSection = document.getElementById('givingTimeSection');
+            const messageSection = document.getElementById('givingMessageSection');
+            
+            // Hide all sections first
+            studentTypeSection.style.display = 'none';
+            parkingPassSection.style.display = 'none';
+            timeSection.style.display = 'none';
+            messageSection.style.display = 'none';
+            
+            if (userType === 'student' && campus !== 'auburn') {
+                studentTypeSection.style.display = 'block';
+            } else if (userType && campus) {
+                updateGivingParkingPasses(campus, userType, '');
+            }
+        }
+
+        function updateGivingStudentType() {
+            const campus = document.getElementById('givingCampus').value;
+            const userType = document.getElementById('givingUserType').value;
+            const studentType = document.getElementById('givingStudentType').value;
+            
+            if (campus && userType && studentType) {
+                updateGivingParkingPasses(campus, userType, studentType);
+            }
+        }
+
+        function updateGivingParkingPass() {
+            const timeSection = document.getElementById('givingTimeSection');
+            const messageSection = document.getElementById('givingMessageSection');
+            
+            if (document.getElementById('givingParkingPass').value) {
+                timeSection.style.display = 'block';
+            }
+        }
+
+        function updateLookingUserType() {
+            const campus = document.getElementById('lookingCampus').value;
+            const userType = document.getElementById('lookingUserType').value;
+            const studentTypeSection = document.getElementById('lookingStudentTypeSection');
+            const parkingPassSection = document.getElementById('lookingParkingPassSection');
+            const messageSection = document.getElementById('lookingMessageSection');
+            
+            // Hide all sections first
+            studentTypeSection.style.display = 'none';
+            parkingPassSection.style.display = 'none';
+            messageSection.style.display = 'none';
+            
+            if (userType === 'student' && campus !== 'auburn') {
+                studentTypeSection.style.display = 'block';
+            } else if (userType && campus) {
+                updateLookingParkingPasses(campus, userType, '');
+            }
+        }
+
+        function updateLookingStudentType() {
+            const campus = document.getElementById('lookingCampus').value;
+            const userType = document.getElementById('lookingUserType').value;
+            const studentType = document.getElementById('lookingStudentType').value;
+            
+            if (campus && userType && studentType) {
+                updateLookingParkingPasses(campus, userType, studentType);
+            }
+        }
+
+        function updateLookingParkingPass() {
+            const messageSection = document.getElementById('lookingMessageSection');
+            
+            if (document.getElementById('lookingParkingPass').value) {
+                messageSection.style.display = 'block';
             }
         }
 
