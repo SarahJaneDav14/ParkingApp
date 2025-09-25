@@ -6,6 +6,8 @@
     <title>Spot Swap - Parking Pal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="../Styles/index.css">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1234567890123456" crossorigin="anonymous"></script>
 </head>
 <body>
     <nav class="navbar bg-mPurple">
@@ -21,6 +23,9 @@
             </button>
             <div class="collapse navbar-collapse" id="Menu">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="../index.html">Home</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="./parkingPal.html">Parking Pal</a>
                     </li>
@@ -43,6 +48,25 @@
             </div>
         </div>
     </nav>
+
+    <!-- Top Banner Ad -->
+    <div class="container-fluid bg-light py-2">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-1234567890123456"
+                         data-ad-slot="1234567896"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container mt-4">
         <h1 class="text-center mb-5">Spot Swap</h1>
@@ -127,6 +151,20 @@
                             <button type="submit" class="btn bg-mPurple text-white w-100">Post Request</button>
                         </form>
                     </div>
+                </div>
+            </div>
+
+            <!-- Contextual Ad for Vehicle Services -->
+            <div class="col-12 mb-4">
+                <div class="text-center">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-1234567890123456"
+                         data-ad-slot="1234567897"
+                         data-ad-format="horizontal"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
                 </div>
             </div>
 
@@ -238,6 +276,25 @@
                                     <small class="text-muted">Time remaining</small>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User's Active Requests Section -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-10">
+                <div class="card shadow purple-border">
+                    <div class="card-header bg-info text-white">
+                        <h3 class="card-title mb-0">
+                            <i class="fas fa-list me-2"></i>Your Active Requests
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">Manage your active spot swap requests. You can have multiple requests active at once!</p>
+                        <div id="userActiveRequests">
+                            <p class="text-muted">Sign in to view your active requests</p>
                         </div>
                     </div>
                 </div>
@@ -355,6 +412,9 @@
                 // Clear sign in fields
                 document.getElementById('lookingAccountName').value = '';
                 document.getElementById('lookingPassword').value = '';
+                
+                // Display user's active requests
+                displayUserActiveRequests(account.name);
                 
                 alert('Successfully signed in! Your information has been auto-filled.');
             } else {
@@ -490,6 +550,9 @@
             document.getElementById('givingParkingPassSection').style.display = 'none';
             document.getElementById('givingTimeSection').style.display = 'none';
             document.getElementById('givingVehicleInfoSection').style.display = 'none';
+            
+            // Display user's active requests
+            displayUserActiveRequests(accountName);
             document.getElementById('givingMessageSection').style.display = 'none';
         });
 
@@ -1082,6 +1145,67 @@
             }
         }
 
+        // Get user's active requests
+        function getUserActiveRequests(accountName) {
+            const availableSpots = JSON.parse(localStorage.getItem('availableSpots') || '[]');
+            const now = new Date();
+            
+            return availableSpots.filter(spot => 
+                spot.accountName === accountName && 
+                new Date(spot.expiresAt) > now
+            );
+        }
+
+        // Remove a specific request
+        function removeRequest(requestId) {
+            let availableSpots = JSON.parse(localStorage.getItem('availableSpots') || '[]');
+            availableSpots = availableSpots.filter(spot => spot.id !== requestId);
+            localStorage.setItem('availableSpots', JSON.stringify(availableSpots));
+            
+            // Refresh the display
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (currentUser) {
+                displayUserActiveRequests(currentUser.name);
+            }
+        }
+
+        // Display user's active requests
+        function displayUserActiveRequests(accountName) {
+            const activeRequests = getUserActiveRequests(accountName);
+            const requestsContainer = document.getElementById('userActiveRequests');
+            
+            if (activeRequests.length === 0) {
+                requestsContainer.innerHTML = '<p class="text-muted">No active requests</p>';
+                return;
+            }
+
+            let html = '<h6 class="fw-bold mb-3">Your Active Requests:</h6>';
+            activeRequests.forEach(request => {
+                const timeRemaining = Math.max(0, Math.floor((new Date(request.expiresAt) - new Date()) / 1000 / 60));
+                html += `
+                    <div class="card mb-2">
+                        <div class="card-body py-2">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <small class="text-muted">${request.campus} - ${request.location}</small><br>
+                                    <small><strong>${request.carYear} ${request.carMake} ${request.carModel}</strong> (${request.carColor})</small><br>
+                                    <small class="text-muted">Floor: ${request.floor}</small>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <small class="text-warning">${timeRemaining} min left</small><br>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="removeRequest(${request.id})">
+                                        <i class="fas fa-times"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            requestsContainer.innerHTML = html;
+        }
+
         // Find matching spot for someone looking
         function findMatchingSpot(campus, location) {
             cleanupExpiredSpots();
@@ -1253,6 +1377,20 @@
             // Update immediately and then every second
             updateTimer();
             const timerInterval = setInterval(updateTimer, 1000);
+        }
+        
+        // Refresh active requests display every 30 seconds
+        setInterval(() => {
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+            if (currentUser) {
+                displayUserActiveRequests(currentUser.name);
+            }
+        }, 30000);
+        
+        // Initial display of active requests if user is signed in
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (currentUser) {
+            displayUserActiveRequests(currentUser.name);
         }
     </script>
 </body>
