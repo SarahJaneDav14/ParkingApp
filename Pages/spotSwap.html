@@ -56,6 +56,37 @@
                     </div>
                     <div class="card-body">
                         <p class="card-text">Need a parking spot? Let others know you're looking!</p>
+                        
+                        <!-- Sign In Section -->
+                        <div class="mb-3" id="lookingSignInSection">
+                            <div class="alert alert-info">
+                                <h6 class="alert-heading">Quick Sign In</h6>
+                                <p class="mb-2">Sign in to auto-fill your information</p>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <input type="text" class="form-control" id="lookingAccountName" placeholder="Account name">
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <input type="password" class="form-control" id="lookingPassword" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="signInLooking()">Sign In</button>
+                                    <small class="text-muted">Don't have an account? <a href="./makeAccount.html">Create one</a></small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sign Out Section -->
+                        <div class="mb-3" id="lookingSignOutSection" style="display: none;">
+                            <div class="alert alert-success">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>Signed in as: <strong id="lookingCurrentUser"></strong></span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="signOutLooking()">Sign Out</button>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <form>
                             <div class="mb-3">
                                 <label for="lookingCampus" class="form-label">Campus</label>
@@ -226,6 +257,7 @@
         // Load saved account data when page loads
         document.addEventListener('DOMContentLoaded', function() {
             loadSavedAccountData();
+            checkLookingSignInStatus();
         });
 
         // Function to load saved account data
@@ -268,6 +300,85 @@
                     }
                 }
             }
+        }
+
+        // Check if user is already signed in for looking section
+        function checkLookingSignInStatus() {
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser') || 'null');
+            if (currentUser) {
+                showLookingSignOutSection(currentUser.name);
+            } else {
+                showLookingSignInSection();
+            }
+        }
+
+        // Show sign in section
+        function showLookingSignInSection() {
+            document.getElementById('lookingSignInSection').style.display = 'block';
+            document.getElementById('lookingSignOutSection').style.display = 'none';
+        }
+
+        // Show sign out section
+        function showLookingSignOutSection(userName) {
+            document.getElementById('lookingSignInSection').style.display = 'none';
+            document.getElementById('lookingSignOutSection').style.display = 'block';
+            document.getElementById('lookingCurrentUser').textContent = userName;
+        }
+
+        // Sign in for looking section
+        function signInLooking() {
+            const accountName = document.getElementById('lookingAccountName').value.trim();
+            const password = document.getElementById('lookingPassword').value;
+            
+            if (!accountName || !password) {
+                alert('Please enter both account name and password.');
+                return;
+            }
+            
+            // Validate credentials
+            const accounts = JSON.parse(localStorage.getItem('parkingAccounts') || '[]');
+            const account = accounts.find(acc => 
+                acc.name.toLowerCase() === accountName.toLowerCase() && 
+                acc.password === password
+            );
+            
+            if (account) {
+                // Store current user in session
+                sessionStorage.setItem('currentUser', JSON.stringify(account));
+                
+                // Show sign out section
+                showLookingSignOutSection(account.name);
+                
+                // Pre-fill the form
+                loadSavedAccountData();
+                
+                // Clear sign in fields
+                document.getElementById('lookingAccountName').value = '';
+                document.getElementById('lookingPassword').value = '';
+                
+                alert('Successfully signed in! Your information has been auto-filled.');
+            } else {
+                alert('Invalid account name or password. Please try again.');
+            }
+        }
+
+        // Sign out for looking section
+        function signOutLooking() {
+            sessionStorage.removeItem('currentUser');
+            showLookingSignInSection();
+            
+            // Clear the form
+            document.getElementById('lookingCampus').selectedIndex = 0;
+            document.getElementById('lookingUserType').selectedIndex = 0;
+            document.getElementById('lookingStudentType').selectedIndex = 0;
+            document.getElementById('lookingParkingPass').selectedIndex = 0;
+            document.getElementById('lookingMessage').value = '';
+            
+            // Hide all sections
+            document.getElementById('lookingUserTypeSection').style.display = 'none';
+            document.getElementById('lookingStudentTypeSection').style.display = 'none';
+            document.getElementById('lookingParkingPassSection').style.display = 'none';
+            document.getElementById('lookingMessageSection').style.display = 'none';
         }
 
         // Handle form submission for giving up a spot
@@ -418,16 +529,16 @@
             
             if (match) {
                 displayCarInformation(match);
+                // Only reset form if a match is found
+                this.reset();
+                document.getElementById('lookingUserTypeSection').style.display = 'none';
+                document.getElementById('lookingStudentTypeSection').style.display = 'none';
+                document.getElementById('lookingParkingPassSection').style.display = 'none';
+                document.getElementById('lookingMessageSection').style.display = 'none';
             } else {
-                alert('No available spots found for your parking pass. Keep checking!');
+                // Show no spots message without resetting form
+                showNoSpotsMessage();
             }
-            
-            // Reset form
-            this.reset();
-            document.getElementById('lookingUserTypeSection').style.display = 'none';
-            document.getElementById('lookingStudentTypeSection').style.display = 'none';
-            document.getElementById('lookingParkingPassSection').style.display = 'none';
-            document.getElementById('lookingMessageSection').style.display = 'none';
         });
 
         // Real-time account validation
@@ -1025,11 +1136,63 @@
             // Insert after the looking form
             const lookingForm = document.querySelector('#lookingCampus').closest('.card');
             const existingMatch = document.getElementById('matchFound');
+            const existingNoSpots = document.getElementById('noSpotsFound');
+            
             if (existingMatch) {
                 existingMatch.remove();
             }
+            if (existingNoSpots) {
+                existingNoSpots.remove();
+            }
             
             lookingForm.insertAdjacentHTML('afterend', carInfoHTML);
+        }
+
+        // Show no spots message without resetting form
+        function showNoSpotsMessage() {
+            const noSpotsHTML = `
+                <div class="alert alert-warning mt-3" id="noSpotsFound">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5 class="alert-heading">🔍 No Spots Available</h5>
+                            <p>No available spots found for your parking pass at this time.</p>
+                            <p class="mb-0">Don't worry! New spots are posted frequently. Try again in a few minutes.</p>
+                        </div>
+                        <div class="col-md-4 text-end d-flex align-items-center">
+                            <button class="btn btn-primary" onclick="retryLookingForSpot()">
+                                <i class="fas fa-redo me-1"></i>Try Again
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Insert after the looking form
+            const lookingForm = document.querySelector('#lookingCampus').closest('.card');
+            const existingMatch = document.getElementById('matchFound');
+            const existingNoSpots = document.getElementById('noSpotsFound');
+            
+            if (existingMatch) {
+                existingMatch.remove();
+            }
+            if (existingNoSpots) {
+                existingNoSpots.remove();
+            }
+            
+            lookingForm.insertAdjacentHTML('afterend', noSpotsHTML);
+        }
+
+        // Retry looking for a spot
+        function retryLookingForSpot() {
+            // Remove the no spots message
+            const existingNoSpots = document.getElementById('noSpotsFound');
+            if (existingNoSpots) {
+                existingNoSpots.remove();
+            }
+            
+            // Trigger the form submission again
+            const form = document.querySelector('#lookingCampus').closest('form');
+            form.dispatchEvent(new Event('submit'));
         }
 
         // Clean up expired spots
