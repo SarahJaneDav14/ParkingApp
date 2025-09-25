@@ -155,6 +155,31 @@
                                     <option value="10">10 minutes</option>
                                 </select>
                             </div>
+                            <div class="mb-3" id="givingVehicleInfoSection" style="display: none;">
+                                <h6 class="form-label fw-bold">Vehicle Information (Required)</h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="givingCarYear" class="form-label">Year</label>
+                                        <input type="number" class="form-control" id="givingCarYear" placeholder="2020" min="1990" max="2024" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="givingCarMake" class="form-label">Make</label>
+                                        <input type="text" class="form-control" id="givingCarMake" placeholder="Honda" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="givingCarModel" class="form-label">Model</label>
+                                        <input type="text" class="form-control" id="givingCarModel" placeholder="Civic" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="givingCarColor" class="form-label">Color</label>
+                                        <input type="text" class="form-control" id="givingCarColor" placeholder="Silver" required>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="givingFloor" class="form-label">Floor/Level</label>
+                                        <input type="text" class="form-control" id="givingFloor" placeholder="3rd floor, Level 2, etc." required>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="mb-3" id="givingMessageSection" style="display: none;">
                                 <label for="givingMessage" class="form-label">Additional Details (Optional)</label>
                                 <textarea class="form-control" id="givingMessage" rows="3" placeholder="Ex: Orange, Magnolia Parking Deck 3rd floor, Black Honda Pilot"></textarea>
@@ -202,6 +227,11 @@
             const studentType = document.getElementById('givingStudentType').value;
             const parkingPass = document.getElementById('givingParkingPass').value;
             const timeWait = document.getElementById('givingTime').value;
+            const carYear = document.getElementById('givingCarYear').value;
+            const carMake = document.getElementById('givingCarMake').value.trim();
+            const carModel = document.getElementById('givingCarModel').value.trim();
+            const carColor = document.getElementById('givingCarColor').value.trim();
+            const floor = document.getElementById('givingFloor').value.trim();
             const message = document.getElementById('givingMessage').value.trim();
             
             const accountError = document.getElementById('accountError');
@@ -255,8 +285,38 @@
                 return;
             }
             
+            if (!carYear) {
+                accountErrorText.textContent = 'Please enter your car year.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            if (!carMake) {
+                accountErrorText.textContent = 'Please enter your car make.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            if (!carModel) {
+                accountErrorText.textContent = 'Please enter your car model.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            if (!carColor) {
+                accountErrorText.textContent = 'Please enter your car color.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
+            if (!floor) {
+                accountErrorText.textContent = 'Please enter the floor/level where your spot is located.';
+                accountError.style.display = 'block';
+                return;
+            }
+            
             // If all validations pass, store spot data and start countdown timer
-            storeSpotData(accountName, campus, parkingPass, timeWait, message);
+            storeSpotData(accountName, campus, parkingPass, timeWait, message, carYear, carMake, carModel, carColor, floor);
             startCountdown(parseInt(timeWait));
             
             // Reset form
@@ -265,6 +325,7 @@
             document.getElementById('givingStudentTypeSection').style.display = 'none';
             document.getElementById('givingParkingPassSection').style.display = 'none';
             document.getElementById('givingTimeSection').style.display = 'none';
+            document.getElementById('givingVehicleInfoSection').style.display = 'none';
             document.getElementById('givingMessageSection').style.display = 'none';
         });
 
@@ -483,15 +544,24 @@
 
         // Handle time selection change for giving up a spot
         document.getElementById('givingTime').addEventListener('change', function() {
+            const vehicleInfoSection = document.getElementById('givingVehicleInfoSection');
             const messageSection = document.getElementById('givingMessageSection');
             
             if (this.value && this.value !== 'Choose time...') {
+                // Show vehicle info section when a time is selected
+                vehicleInfoSection.style.display = 'block';
                 // Show message section when a time is selected
                 messageSection.style.display = 'block';
             } else {
-                // Hide message section when no time is selected
+                // Hide vehicle info and message sections when no time is selected
+                vehicleInfoSection.style.display = 'none';
                 messageSection.style.display = 'none';
-                // Clear message content
+                // Clear vehicle info and message content
+                document.getElementById('givingCarYear').value = '';
+                document.getElementById('givingCarMake').value = '';
+                document.getElementById('givingCarModel').value = '';
+                document.getElementById('givingCarColor').value = '';
+                document.getElementById('givingFloor').value = '';
                 document.getElementById('givingMessage').value = '';
             }
         });
@@ -740,7 +810,7 @@
         }
 
         // Store spot data when someone gives up a spot
-        function storeSpotData(accountName, campus, location, timeWait, message) {
+        function storeSpotData(accountName, campus, location, timeWait, message, carYear, carMake, carModel, carColor, floor) {
             const accounts = JSON.parse(localStorage.getItem('parkingAccounts') || '[]');
             const account = accounts.find(acc => acc.name.toLowerCase() === accountName.toLowerCase());
             
@@ -752,8 +822,11 @@
                     location: location,
                     timeWait: timeWait,
                     message: message,
-                    carModel: account.carModel,
-                    carColor: account.carColor,
+                    carYear: carYear,
+                    carMake: carMake,
+                    carModel: carModel,
+                    carColor: carColor,
+                    floor: floor,
                     createdAt: new Date().toISOString(),
                     expiresAt: new Date(Date.now() + (parseInt(timeWait) * 60 * 1000)).toISOString()
                 };
@@ -794,8 +867,11 @@
                             <p><strong>Location:</strong> ${match.campus} - ${match.location}</p>
                             <p><strong>Car Details:</strong></p>
                             <ul class="mb-2">
+                                <li><strong>Year:</strong> ${match.carYear}</li>
+                                <li><strong>Make:</strong> ${match.carMake}</li>
                                 <li><strong>Model:</strong> ${match.carModel}</li>
                                 <li><strong>Color:</strong> ${match.carColor}</li>
+                                <li><strong>Floor/Level:</strong> ${match.floor}</li>
                                 <li><strong>Posted by:</strong> ${match.accountName}</li>
                             </ul>
                             ${match.message ? `<p><strong>Additional Info:</strong> ${match.message}</p>` : ''}
