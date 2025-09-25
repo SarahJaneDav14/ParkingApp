@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parking Pal - Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <link rel="stylesheet" href="../Styles/index.css">
 </head>
 <body>
@@ -22,13 +23,22 @@
             <div class="collapse navbar-collapse" id="Menu">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <a class="nav-link text-white" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-white" href="./parkingPal.html">Parking Pal</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="./spotSwap.html">Spot Swap</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="./Pages/makeAccount.html">Make an Account</a>
+                        <a class="nav-link text-white" href="./viewRequests.html">View Requests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./Pages/signIn.html">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./Pages/makeAccount.html">Create Account</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="./meetTheTeam.html">Meet the Team</a>
@@ -45,7 +55,7 @@
             <div class="col-md-8">
                 <div class="card shadow purple-border">
                     <div class="card-body">
-                        <h3 class="card-title text-center mb-4">Find Parking Near Your Destination</h3>
+                        <h3 class="card-title text-center mb-4">Find Out Where On Campus You Can Park!</h3>
                         <form>
                             <div class="mb-3">
                                 <label for="destination" class="form-label">Where do you want to go?</label>
@@ -153,10 +163,37 @@
         
         <!-- Image display section -->
         <div class="row justify-content-center mt-4" id="imageDisplaySection" style="display: none;">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="card shadow purple-border">
-                    <div class="card-body text-center d-flex flex-column align-items-center">
-                        <h4 class="card-title mb-3">Orange Parking Map</h4>
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4" id="parkingMapTitle">Orange Parking Map</h4>
+                        
+                        <!-- Toggle buttons for map view -->
+                        <div class="text-center mb-3">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-primary active" id="mapViewBtn" onclick="showMapView()">
+                                    <i class="fas fa-map me-1"></i>Interactive Map
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" id="imageViewBtn" onclick="showImageView()">
+                                    <i class="fas fa-image me-1"></i>Parking Images
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Interactive Map Section -->
+                        <div id="mapSection">
+                            <div id="parkingMap" style="height: 500px; width: 100%; border-radius: 8px;"></div>
+                            <div class="mt-3">
+                                <p class="text-muted text-center">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Use the map to explore the area around your parking zone. Zoom and pan to see familiar landmarks and roads.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Image Section -->
+                        <div id="imageSection" style="display: none;">
+                            <div class="text-center d-flex flex-column align-items-center">
                         <img id="parkingImage" src="" alt="Parking Map" class="img-fluid mx-auto" style="max-height: 500px;">
                         <img id="parkingImage2" src="" alt="Parking Map 2" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
                         <img id="parkingImage3" src="" alt="Parking Map 3" class="img-fluid mx-auto mt-3" style="max-height: 500px; display: none;">
@@ -169,6 +206,15 @@
                         <p id="imageSource" class="mt-2" style="display: none;">
                             Source: <a href="https://www.uah.edu/images/map/050922/UAH-parking-map-050922.pdf" target="_blank" rel="noopener">UAH Parking Map (PDF)</a>
                         </p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-center">
+                            <a href="./spotSwap.html" class="btn btn-success btn-lg">
+                                <i class="fas fa-exchange-alt me-2"></i>Swap Your Spot
+                            </a>
+                            <p class="mt-2 text-muted">Found your parking zone? Connect with others to swap spots!</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -176,6 +222,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
     <script>
         document.getElementById('destination').addEventListener('change', function() {
@@ -577,6 +624,410 @@
                 imageSource.style.display = 'block';
             } else {
                 imageDisplaySection.style.display = 'none';
+            }
+        });
+
+        // Interactive Map functionality
+        let map;
+        let currentParkingData = null;
+
+        // Campus coordinates and parking zone data
+        const campusData = {
+            'ua-tuscaloosa': {
+                center: [33.2098, -87.5692],
+                zoom: 15,
+                parkingZones: {
+                    'orange': { lat: 33.2098, lng: -87.5692, name: 'Orange Parking Zone' },
+                    'silver': { lat: 33.2105, lng: -87.5685, name: 'Silver Parking Zone' },
+                    'tan': { lat: 33.2090, lng: -87.5700, name: 'Tan Parking Zone' },
+                    'yellow': { lat: 33.2100, lng: -87.5680, name: 'Yellow Parking Zone' },
+                    'east-commuter': { lat: 33.2110, lng: -87.5675, name: 'East Commuter Parking' },
+                    'west-commuter': { lat: 33.2085, lng: -87.5705, name: 'West Commuter Parking' },
+                    'fs-parking': { lat: 33.2095, lng: -87.5695, name: 'Faculty/Staff Parking' }
+                }
+            },
+            'ua-birmingham': {
+                center: [33.5024, -86.8064],
+                zoom: 15,
+                parkingZones: {
+                    'FallSpring – Zone A or Zone H': { lat: 33.5024, lng: -86.8064, name: 'Zone A/H Parking' },
+                    'Fall (only) – Zone A or Zone H': { lat: 33.5024, lng: -86.8064, name: 'Zone A/H Parking (Fall)' },
+                    'FallSpring – Zone D9A': { lat: 33.5030, lng: -86.8058, name: 'Zone D9A Parking' },
+                    'FallSpring – Zone B': { lat: 33.5018, lng: -86.8070, name: 'Zone B Parking' },
+                    'Fall (only) – Zone B': { lat: 33.5018, lng: -86.8070, name: 'Zone B Parking (Fall)' },
+                    'FallSpring – Zone D, E, F, G': { lat: 33.5028, lng: -86.8060, name: 'Zone D,E,F,G Parking' },
+                    'Fall (only) – Zone D, E, F, G': { lat: 33.5028, lng: -86.8060, name: 'Zone D,E,F,G Parking (Fall)' },
+                    'FallSpring – Zone C': { lat: 33.5015, lng: -86.8075, name: 'Zone C Commuter Parking' },
+                    'Fall (only) – Zone C': { lat: 33.5015, lng: -86.8075, name: 'Zone C Commuter Parking (Fall)' },
+                    'fs-parking': { lat: 33.5020, lng: -86.8065, name: 'Faculty/Staff Parking' }
+                }
+            },
+            'ua-huntsville': {
+                center: [34.7304, -86.5861],
+                zoom: 15,
+                parkingZones: {
+                    'residential': { lat: 34.7304, lng: -86.5861, name: 'Residential Parking' },
+                    'commuter': { lat: 34.7310, lng: -86.5855, name: 'Commuter Parking' },
+                    'faculty-staff': { lat: 34.7298, lng: -86.5867, name: 'Faculty/Staff Parking' }
+                }
+            },
+            'auburn': {
+                center: [32.5936, -85.4952],
+                zoom: 15,
+                parkingZones: {
+                    'a-zone': { lat: 32.5936, lng: -85.4952, name: 'A-Zone Parking' },
+                    'b-zone': { lat: 32.5942, lng: -85.4946, name: 'B-Zone Parking' },
+                    'c-zone': { lat: 32.5930, lng: -85.4958, name: 'C-Zone Parking' },
+                    'pc': { lat: 32.5940, lng: -85.4950, name: 'PC Zone Parking' },
+                    'rd': { lat: 32.5928, lng: -85.4960, name: 'RD Zone Parking' },
+                    'rh': { lat: 32.5945, lng: -85.4945, name: 'RH Zone Parking' },
+                    'ro': { lat: 32.5935, lng: -85.4955, name: 'RO Zone Parking' },
+                    'rw': { lat: 32.5925, lng: -85.4965, name: 'RW Zone Parking' }
+                }
+            }
+        };
+
+        // Initialize map when parking data is displayed
+        function initializeMap(campus, parkingPass) {
+            if (map) {
+                map.remove();
+            }
+
+            const campusInfo = campusData[campus];
+            if (!campusInfo) return;
+
+            // Create map
+            map = L.map('parkingMap').setView(campusInfo.center, campusInfo.zoom);
+
+            // Add tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add parking zone marker
+            const zoneInfo = campusInfo.parkingZones[parkingPass];
+            if (zoneInfo) {
+                const marker = L.marker([zoneInfo.lat, zoneInfo.lng]).addTo(map);
+                marker.bindPopup(`
+                    <strong>${zoneInfo.name}</strong><br>
+                    <small>Click and drag to explore the area around this parking zone</small>
+                `).openPopup();
+
+                // Add a circle to show approximate parking area
+                L.circle([zoneInfo.lat, zoneInfo.lng], {
+                    color: '#ff6b6b',
+                    fillColor: '#ff6b6b',
+                    fillOpacity: 0.2,
+                    radius: 100
+                }).addTo(map);
+            }
+
+            // Add some nearby landmarks for context
+            addNearbyLandmarks(campus, map);
+        }
+
+        // Add nearby landmarks to help users orient themselves
+        function addNearbyLandmarks(campus, map) {
+            const landmarks = {
+                'ua-tuscaloosa': [
+                    { lat: 33.2098, lng: -87.5692, name: 'University of Alabama', type: 'university' },
+                    { lat: 33.2105, lng: -87.5680, name: 'Bryant-Denny Stadium', type: 'stadium' },
+                    { lat: 33.2085, lng: -87.5700, name: 'Student Center', type: 'building' }
+                ],
+                'ua-birmingham': [
+                    { lat: 33.5024, lng: -86.8064, name: 'UAB Campus', type: 'university' },
+                    { lat: 33.5030, lng: -86.8050, name: 'UAB Hospital', type: 'hospital' },
+                    { lat: 33.5015, lng: -86.8080, name: 'UAB Recreation Center', type: 'building' }
+                ],
+                'ua-huntsville': [
+                    { lat: 34.7304, lng: -86.5861, name: 'UAH Campus', type: 'university' },
+                    { lat: 34.7310, lng: -86.5850, name: 'UAH Library', type: 'building' },
+                    { lat: 34.7295, lng: -86.5870, name: 'UAH Student Center', type: 'building' }
+                ],
+                'auburn': [
+                    { lat: 32.5936, lng: -85.4952, name: 'Auburn University', type: 'university' },
+                    { lat: 32.5945, lng: -85.4940, name: 'Jordan-Hare Stadium', type: 'stadium' },
+                    { lat: 32.5925, lng: -85.4965, name: 'Student Center', type: 'building' }
+                ]
+            };
+
+            const campusLandmarks = landmarks[campus] || [];
+            campusLandmarks.forEach(landmark => {
+                const icon = getLandmarkIcon(landmark.type);
+                L.marker([landmark.lat, landmark.lng], { icon }).addTo(map)
+                    .bindPopup(`<strong>${landmark.name}</strong>`);
+            });
+        }
+
+        // Get appropriate icon for landmark type
+        function getLandmarkIcon(type) {
+            const iconMap = {
+                'university': '🏫',
+                'stadium': '🏟️',
+                'hospital': '🏥',
+                'building': '🏢'
+            };
+            
+            return L.divIcon({
+                html: `<div style="font-size: 20px;">${iconMap[type] || '📍'}</div>`,
+                iconSize: [20, 20],
+                className: 'landmark-icon'
+            });
+        }
+
+        // Show map view
+        function showMapView() {
+            document.getElementById('mapSection').style.display = 'block';
+            document.getElementById('imageSection').style.display = 'none';
+            document.getElementById('mapViewBtn').classList.add('active');
+            document.getElementById('imageViewBtn').classList.remove('active');
+            
+            // Reinitialize map if we have parking data
+            if (currentParkingData) {
+                setTimeout(() => {
+                    initializeMap(currentParkingData.campus, currentParkingData.parkingPass);
+                }, 100);
+            }
+        }
+
+        // Show image view
+        function showImageView() {
+            document.getElementById('mapSection').style.display = 'none';
+            document.getElementById('imageSection').style.display = 'block';
+            document.getElementById('imageViewBtn').classList.add('active');
+            document.getElementById('mapViewBtn').classList.remove('active');
+        }
+
+        // Update the form submission to store parking data and initialize map
+        const originalFormSubmit = document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const destination = document.getElementById('destination').value;
+            const userType = document.getElementById('userType').value;
+            const studentType = document.getElementById('studentType').value;
+            const parkingPass = document.getElementById('parkingPass').value;
+            const tuscaloosaParkingPass = document.getElementById('tuscaloosaParkingPass').value;
+            const commuterPass = document.getElementById('commuterPass').value;
+            const tuscaloosaCommuterPass = document.getElementById('tuscaloosaCommuterPass').value;
+            const facultyStaffPass = document.getElementById('facultyStaffPass').value;
+            const auburnFacultyStaffPass = document.getElementById('auburnFacultyStaffPass').value;
+            const auburnStudentPass = document.getElementById('auburnStudentPass').value;
+            
+            const imageDisplaySection = document.getElementById('imageDisplaySection');
+            const parkingImage = document.getElementById('parkingImage');
+            const parkingImage2 = document.getElementById('parkingImage2');
+            const parkingImage3 = document.getElementById('parkingImage3');
+            const parkingImage4 = document.getElementById('parkingImage4');
+            const parkingImage5 = document.getElementById('parkingImage5');
+            const parkingImage6 = document.getElementById('parkingImage6');
+            const parkingImage7 = document.getElementById('parkingImage7');
+            const parkingImage8 = document.getElementById('parkingImage8');
+            const parkingImage9 = document.getElementById('parkingImage9');
+            const imageSource = document.getElementById('imageSource');
+            
+            // Hide all additional images by default
+            parkingImage2.style.display = 'none';
+            parkingImage3.style.display = 'none';
+            parkingImage4.style.display = 'none';
+            parkingImage5.style.display = 'none';
+            parkingImage6.style.display = 'none';
+            parkingImage7.style.display = 'none';
+            parkingImage8.style.display = 'none';
+            parkingImage9.style.display = 'none';
+            imageSource.style.display = 'none';
+            
+            // Determine the actual parking pass used
+            let actualParkingPass = parkingPass || tuscaloosaParkingPass || commuterPass || 
+                                  tuscaloosaCommuterPass || facultyStaffPass || 
+                                  auburnFacultyStaffPass || auburnStudentPass;
+            
+            // Store current parking data for map initialization
+            currentParkingData = {
+                campus: destination,
+                parkingPass: actualParkingPass
+            };
+            
+            // UAB-specific parking logic
+            if (destination === 'ua-birmingham') {
+            if (parkingPass === 'FallSpring – Zone A or Zone H') {
+                    parkingImage.src = '../Images/FallSpring – Zone A or Zone H1.jpeg';
+                    parkingImage2.src = '../Images/FallSpring – Zone A or Zone H2.jpeg';
+                parkingImage2.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone A/H Parking Map (Fall/Spring)';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'Fall (only) – Zone A or Zone H') {
+                    parkingImage.src = '../Images/Fall (only) – Zone A or Zone H1.jpeg';
+                    parkingImage2.src = '../Images/Fall (only) – Zone A or Zone H2.jpeg';
+                parkingImage2.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone A/H Parking Map (Fall Only)';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'FallSpring – Zone D9A') {
+                parkingImage.src = '../Images/FallSpring – Zone D9A.jpeg';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone D9A Parking Map';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'FallSpring – Zone B') {
+                parkingImage.src = '../Images/FallSpring – Zone B.jpeg';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone B Parking Map (Fall/Spring)';
+                imageDisplaySection.style.display = 'block';
+            } else if (parkingPass === 'Fall (only) – Zone B') {
+                parkingImage.src = '../Images/Fall (only) – Zone B.jpeg';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone B Parking Map (Fall Only)';
+                    imageDisplaySection.style.display = 'block';
+                } else if (parkingPass === 'FallSpring – Zone D, E, F, G') {
+                    parkingImage.src = '../Images/FallSpring – Zone D, E, F, G1.jpeg';
+                    parkingImage2.src = '../Images/FallSpring – Zone D, E, F, G2.jpeg';
+                    parkingImage3.src = '../Images/FallSpring – Zone D, E, F, G3.jpeg';
+                    parkingImage4.src = '../Images/FallSpring – Zone D, E, F, G4.jpeg';
+                    parkingImage2.style.display = 'block';
+                    parkingImage3.style.display = 'block';
+                    parkingImage4.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Zone D, E, F, G Parking Map (Fall/Spring)';
+                    imageDisplaySection.style.display = 'block';
+                } else if (commuterPass === 'Fall (only) – Zone D, E, F, G') {
+                    parkingImage.src = '../Images/Fall (only) – Zone D, E, F, G1.jpeg';
+                    parkingImage2.src = '../Images/Fall (only) – Zone D, E, F, G2.jpeg';
+                    parkingImage3.src = '../Images/Fall (only) – Zone D, E, F, G3.jpeg';
+                    parkingImage4.src = '../Images/Fall (only) – Zone D, E, F, G4.jpeg';
+                    parkingImage2.style.display = 'block';
+                    parkingImage3.style.display = 'block';
+                    parkingImage4.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone D, E, F, G Parking Map (Fall Only)';
+                    imageDisplaySection.style.display = 'block';
+                } else if (commuterPass === 'FallSpring – Zone C') {
+                    parkingImage.src = '../Images/FallSpring – Zone C.jpeg';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone C Parking Map (Fall/Spring)';
+                    imageDisplaySection.style.display = 'block';
+                } else if (commuterPass === 'Fall (only) – Zone C') {
+                    parkingImage.src = '../Images/Fall (only) – Zone C.jpeg';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Commuter Zone C Parking Map (Fall Only)';
+                    imageDisplaySection.style.display = 'block';
+                } else if (userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
+                    parkingImage.src = '../Images/Employee parking.jpeg';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAB Faculty/Staff Parking Map';
+                    imageDisplaySection.style.display = 'block';
+                }
+            } else if (destination === 'ua-tuscaloosa') {
+                // UA Tuscaloosa-specific parking logic
+                if (tuscaloosaParkingPass === 'orange') {
+                    parkingImage.src = '../Images/Orange Parking.png';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Orange Parking Map';
+                    imageDisplaySection.style.display = 'block';
+                } else if (tuscaloosaParkingPass === 'silver') {
+                    parkingImage.src = '../Images/Silver Parking.png';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Silver Parking Map';
+                    imageDisplaySection.style.display = 'block';
+                } else if (tuscaloosaParkingPass === 'tan') {
+                    parkingImage.src = '../Images/Tan Parking.png';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Tan Parking Map';
+                    imageDisplaySection.style.display = 'block';
+                } else if (tuscaloosaParkingPass === 'yellow') {
+                    parkingImage.src = '../Images/Yellow Parking1.png';
+                    parkingImage2.src = '../Images/Yellow Parking2.png';
+                    parkingImage2.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Yellow Parking Map';
+                    imageDisplaySection.style.display = 'block';
+                } else if (tuscaloosaCommuterPass === 'east-commuter') {
+                    parkingImage.src = '../Images/East Commuter.png';
+                    parkingImage2.src = '../Images/East Commuter2.png';
+                    parkingImage3.src = '../Images/East Commuter3.png';
+                    parkingImage4.src = '../Images/East Commuter4.png';
+                    parkingImage5.src = '../Images/East Commuter5.png';
+                    parkingImage2.style.display = 'block';
+                    parkingImage3.style.display = 'block';
+                    parkingImage4.style.display = 'block';
+                    parkingImage5.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa East Commuter Parking Map';
+                    imageDisplaySection.style.display = 'block';
+                } else if (tuscaloosaCommuterPass === 'west-commuter') {
+                    parkingImage.src = '../Images/West Commuter.png';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa West Commuter Parking Map';
+                    imageDisplaySection.style.display = 'block';
+                } else if (userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
+                    parkingImage.src = '../Images/FS Parking.png';
+                    parkingImage2.src = '../Images/FS Parking2.png';
+                    parkingImage3.src = '../Images/FS Parking3.png';
+                    parkingImage4.src = '../Images/FS Parking4.png';
+                    parkingImage5.src = '../Images/FS Parking5.png';
+                    parkingImage6.src = '../Images/FS Parking6.png';
+                    parkingImage2.style.display = 'block';
+                    parkingImage3.style.display = 'block';
+                    parkingImage4.style.display = 'block';
+                    parkingImage5.style.display = 'block';
+                    parkingImage6.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UA Tuscaloosa Faculty/Staff Parking Map';
+                    imageDisplaySection.style.display = 'block';
+                }
+            } else if (destination === 'ua-huntsville') {
+                // UAH-specific parking logic
+                if (userType === 'student' && studentType === 'residential') {
+                    parkingImage.src = '../Images/ParkingKey.jpg';
+                    parkingImage2.src = '../Images/ResParking 1.jpg';
+                    parkingImage3.src = '../Images/ResParking2.jpg';
+                    parkingImage2.style.display = 'block';
+                    parkingImage3.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAH Residential Parking';
+                    imageDisplaySection.style.display = 'block';
+                    imageSource.style.display = 'block';
+                } else if (userType === 'student' && studentType === 'commuter') {
+                    parkingImage.src = '../Images/ParkingKey.jpg';
+                    parkingImage2.src = '../Images/ComParking 1.jpg';
+                    parkingImage3.src = '../Images/ComParking 2.jpg';
+                    parkingImage2.style.display = 'block';
+                    parkingImage3.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAH Commuter Parking';
+                    imageDisplaySection.style.display = 'block';
+                    imageSource.style.display = 'block';
+                } else if (userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
+                    parkingImage.src = '../Images/ParkingKey.jpg';
+                    parkingImage2.src = '../Images/FacParking 1.jpg';
+                    parkingImage3.src = '../Images/FacParking 2.jpg';
+                    parkingImage2.style.display = 'block';
+                    parkingImage3.style.display = 'block';
+                    document.querySelector('#imageDisplaySection h4').textContent = 'UAH Faculty/Staff Parking';
+                    imageDisplaySection.style.display = 'block';
+                    imageSource.style.display = 'block';
+                }
+            } else if (destination === 'auburn') {
+                // Auburn-specific parking logic
+                if (userType === 'student' && auburnStudentPass) {
+                    const passDisplayName = auburnStudentPass.toUpperCase();
+                    document.querySelector('#imageDisplaySection h4').textContent = `Auburn ${passDisplayName} Parking Map`;
+
+                    if (auburnStudentPass === 'c-zone') parkingImage.src = '../Images/Auburn C-zone.png';
+                    else if (auburnStudentPass === 'pc') parkingImage.src = '../Images/Auburn PC zone.png';
+                    else if (auburnStudentPass === 'rd') parkingImage.src = '../Images/Auburn RD zone.png';
+                    else if (auburnStudentPass === 'rh') parkingImage.src = '../Images/Auburn RH zone.png';
+                    else if (auburnStudentPass === 'ro') parkingImage.src = '../Images/Auburn RO zone.png';
+                    else if (auburnStudentPass === 'rw') parkingImage.src = '../Images/Auburn RW zone.png';
+                    
+                    imageDisplaySection.style.display = 'block';
+                } else if (userType === 'faculty-staff' && auburnFacultyStaffPass) {
+                    const passDisplayName = auburnFacultyStaffPass.toUpperCase();
+                    document.querySelector('#imageDisplaySection h4').textContent = `Auburn ${passDisplayName} Parking Map`;
+
+                    if (auburnFacultyStaffPass === 'a-zone') parkingImage.src = '../Images/Auburn A-zone.png';
+                    else if (auburnFacultyStaffPass === 'b-zone') parkingImage.src = '../Images/Auburn B-zone.png';
+
+                    imageDisplaySection.style.display = 'block';
+                }
+            } else if (destination === 'ua-huntsville' && userType === 'faculty-staff' && facultyStaffPass === 'fs-parking') {
+                parkingImage.src = '../Images/ParkingKey.jpg';
+                parkingImage2.src = '../Images/FacParking 1.jpg';
+                parkingImage3.src = '../Images/FacParking 2.jpg';
+                parkingImage2.style.display = 'block';
+                parkingImage3.style.display = 'block';
+                document.querySelector('#imageDisplaySection h4').textContent = 'UAH Faculty/Staff Parking';
+                imageDisplaySection.style.display = 'block';
+                imageSource.style.display = 'block';
+            } else {
+                imageDisplaySection.style.display = 'none';
+            }
+            
+            // Initialize map after showing the section
+            if (imageDisplaySection.style.display === 'block') {
+                setTimeout(() => {
+                    initializeMap(destination, actualParkingPass);
+                }, 100);
             }
         });
     </script>

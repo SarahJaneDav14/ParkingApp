@@ -6,6 +6,7 @@
     <title>Parking Pal</title>
     <link rel="icon" type="image/png" href="./Images/ParkPalLogo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel = "stylesheet" href="./Styles/index.css">
 </head>
 <body>
@@ -23,13 +24,22 @@
             <div class="collapse navbar-collapse" id="Menu">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <a class="nav-link text-white" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-white" href="./Pages/parkingPal.html">Parking Pal</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="./Pages/spotSwap.html">Spot Swap</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="./Pages/makeAccount.html">Make an Account</a>
+                        <a class="nav-link text-white" href="./Pages/viewRequests.html">View Requests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./Pages/signIn.html">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./Pages/makeAccount.html">Create Account</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="./Pages/meetTheTeam.html">Meet the Team</a>
@@ -39,23 +49,130 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <div class="container mt-5">
-        <div class="row justify-content-center">
+        <div class="row justify-content-center text-center mb-5">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold text-primary mb-4">Never Struggle with Campus Parking Again</h1>
+                <p class="lead mb-4">Parking Pal makes finding and swapping parking spots on campus simple and stress-free. Whether you're a student or faculty member, we've got you covered across multiple Alabama universities.</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="./Pages/parkingPal.html" class="btn btn-primary btn-lg">Find Your Parking</a>
+                    <a href="./Pages/spotSwap.html" class="btn btn-outline-primary btn-lg">Swap Spots</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="text-center mb-5">Why Choose Parking Pal?</h2>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-map-marker-alt fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Campus-Specific Maps</h5>
+                        <p class="card-text">Get detailed parking maps for UA Tuscaloosa, UAB, UAH, and Auburn with zone-specific information.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-exchange-alt fa-3x text-success"></i>
+                        </div>
+                        <h5 class="card-title">Real-Time Spot Swapping</h5>
+                        <p class="card-text">Connect with other students and faculty to swap parking spots in real-time with detailed vehicle information.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-clock fa-3x text-warning"></i>
+                        </div>
+                        <h5 class="card-title">Time-Sensitive Updates</h5>
+                        <p class="card-text">Get instant notifications about available spots with countdown timers to ensure you don't miss out.</p>
+                    </div>
+                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Features Cards -->
+        <div class="row justify-content-center mb-5">
             <div class="col-md-5 mb-4">
                 <div class="card h-100 shadow purple-border">
                     <div class="card-body text-center">
-                        <h3 class="card-title mb-3">Parking Pal</h3>
-                        <p class="card-text">Find and reserve parking spots with ease. Our smart parking system helps you locate available spaces in real-time.</p>
-                        <a href="./Pages/parkingPal.html" class="btn btn-primary">Go to Parking Pal</a>
+                        <div class="mb-3">
+                            <i class="fas fa-search fa-2x text-primary"></i>
+                        </div>
+                        <h3 class="card-title mb-3">Find Out Where On Campus You Can Park!</h3>
+                        <p class="card-text">Simply select your university, student/faculty status, and parking pass to instantly see where you can park on campus. Get detailed maps and zone information tailored to your specific needs.</p>
+                        <a href="./Pages/parkingPal.html" class="btn btn-primary">Find Your Parking</a>
                     </div>
                 </div>
             </div>
             <div class="col-md-5 mb-4">
                 <div class="card h-100 shadow purple-border">
                     <div class="card-body text-center">
+                        <div class="mb-3">
+                            <i class="fas fa-handshake fa-2x text-success"></i>
+                        </div>
                         <h3 class="card-title mb-3">Spot Swap</h3>
-                        <p class="card-text">Exchange parking spots with other users. Trade your current spot for a better location or time slot.</p>
-                        <a href="./Pages/spotSwap.html" class="btn btn-primary">Go to Spot Swap</a>
+                        <p class="card-text">Have a spot to give away? Need a better location? Connect with other campus community members to swap parking spots. Share detailed vehicle information for easy identification.</p>
+                        <a href="./Pages/spotSwap.html" class="btn btn-success">Start Swapping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center py-5">
+                        <h2 class="mb-4">Join the Campus Community</h2>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="h2 fw-bold">4</div>
+                                <div>Universities Supported</div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="h2 fw-bold">100+</div>
+                                <div>Parking Zones Covered</div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="h2 fw-bold">24/7</div>
+                                <div>Spot Availability</div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="h2 fw-bold">Free</div>
+                                <div>To Use</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action Section -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="card border-0 shadow">
+                    <div class="card-body py-5">
+                        <h3 class="mb-4">Ready to Simplify Your Campus Parking?</h3>
+                        <p class="lead mb-4">Join thousands of students and faculty who have made parking stress-free with Parking Pal.</p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="./Pages/signIn.html" class="btn btn-primary btn-lg">Sign In</a>
+                            <a href="./Pages/makeAccount.html" class="btn btn-outline-primary btn-lg">Create Account</a>
+                            <a href="./Pages/meetTheTeam.html" class="btn btn-outline-secondary btn-lg">Meet the Team</a>
+                        </div>
                     </div>
                 </div>
             </div>
