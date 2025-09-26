@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Spot Requests - Parking Pal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../Styles/index.css">
+</head>
+<body>
+    <nav class="navbar bg-mPurple">
+        <div class="container-fluid">
+            <div class="navbar-nav mx-auto">
+                <a href="../index.html" class="navbar-brand text-white text-decoration-none d-flex align-items-center">
+                    <img src="../Images/ParkPalLogo.png" alt="Parking Pal Logo" height="40" class="me-2">
+                    <h1 id="header" class="mb-0 fw-bold">Parking Pal</h1>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#Menu" aria-controls="Menu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="Menu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./parkingPal.html">Parking Pal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./spotSwap.html">Spot Swap</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./viewRequests.html">View Requests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./signIn.html">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./makeAccount.html">Create Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./meetTheTeam.html">Meet the Team</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-4">Available Spot Requests</h1>
+                <p class="text-center text-muted mb-4">Browse all current parking spot requests and find the perfect match for your needs.</p>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filter Requests</h5>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="campusFilter" class="form-label">Campus</label>
+                                <select class="form-select" id="campusFilter">
+                                    <option value="">All Campuses</option>
+                                    <option value="ua-tuscaloosa">University of Alabama - Tuscaloosa</option>
+                                    <option value="ua-birmingham">University of Alabama - Birmingham</option>
+                                    <option value="ua-huntsville">University of Alabama - Huntsville</option>
+                                    <option value="auburn">Auburn</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="typeFilter" class="form-label">Type</label>
+                                <select class="form-select" id="typeFilter">
+                                    <option value="">All Types</option>
+                                    <option value="giving">Giving Up Spots</option>
+                                    <option value="looking">Looking for Spots</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="sortFilter" class="form-label">Sort By</label>
+                                <select class="form-select" id="sortFilter">
+                                    <option value="newest">Newest First</option>
+                                    <option value="oldest">Oldest First</option>
+                                    <option value="time">Time Remaining</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3 d-flex align-items-end">
+                                <button class="btn btn-primary w-100" onclick="applyFilters()">Apply Filters</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requests Display -->
+        <div class="row" id="requestsContainer">
+            <!-- Requests will be dynamically loaded here -->
+        </div>
+
+        <!-- No Requests Message -->
+        <div class="row" id="noRequestsMessage" style="display: none;">
+            <div class="col-12">
+                <div class="card text-center">
+                    <div class="card-body py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h4>No Requests Found</h4>
+                        <p class="text-muted">There are currently no spot requests matching your criteria.</p>
+                        <a href="./spotSwap.html" class="btn btn-primary">Post a Request</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    
+    <script>
+        let allRequests = [];
+        let filteredRequests = [];
+
+        // Load all requests on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllRequests();
+        });
+
+        // Load requests from localStorage
+        function loadAllRequests() {
+            const spots = JSON.parse(localStorage.getItem('availableSpots') || '[]');
+            const currentTime = new Date();
+            
+            // Filter out expired spots
+            allRequests = spots.filter(spot => new Date(spot.expiresAt) > currentTime);
+            
+            // Add looking requests (these would need to be stored separately in a real app)
+            // For now, we'll just show the giving up spots
+            filteredRequests = [...allRequests];
+            
+            displayRequests();
+        }
+
+        // Display requests
+        function displayRequests() {
+            const container = document.getElementById('requestsContainer');
+            const noRequestsMessage = document.getElementById('noRequestsMessage');
+            
+            if (filteredRequests.length === 0) {
+                container.innerHTML = '';
+                noRequestsMessage.style.display = 'block';
+                return;
+            }
+            
+            noRequestsMessage.style.display = 'none';
+            
+            container.innerHTML = filteredRequests.map(spot => `
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="badge bg-success">Available</span>
+                            <small class="text-muted">${formatTimeRemaining(spot.expiresAt)}</small>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title">${getCampusName(spot.campus)}</h6>
+                            <p class="card-text">
+                                <strong>Location:</strong> ${spot.location}<br>
+                                <strong>Posted by:</strong> ${spot.accountName}<br>
+                                <strong>Wait Time:</strong> ${spot.timeWait} minutes
+                            </p>
+                            <div class="mb-3">
+                                <h6>Vehicle Details:</h6>
+                                <ul class="list-unstyled small">
+                                    <li><strong>Year:</strong> ${spot.carYear || 'N/A'}</li>
+                                    <li><strong>Make:</strong> ${spot.carMake || 'N/A'}</li>
+                                    <li><strong>Model:</strong> ${spot.carModel || 'N/A'}</li>
+                                    <li><strong>Color:</strong> ${spot.carColor || 'N/A'}</li>
+                                    <li><strong>Floor:</strong> ${spot.floor || 'N/A'}</li>
+                                </ul>
+                            </div>
+                            ${spot.message ? `<p class="card-text"><strong>Additional Info:</strong> ${spot.message}</p>` : ''}
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Posted ${formatDate(spot.createdAt)}</small>
+                                <button class="btn btn-sm btn-primary" onclick="contactUser('${spot.accountName}')">
+                                    <i class="fas fa-comment me-1"></i>Contact
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const campusFilter = document.getElementById('campusFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+            
+            filteredRequests = allRequests.filter(spot => {
+                if (campusFilter && spot.campus !== campusFilter) return false;
+                // For now, we only have "giving" type spots
+                if (typeFilter && typeFilter !== 'giving') return false;
+                return true;
+            });
+            
+            // Sort requests
+            switch(sortFilter) {
+                case 'newest':
+                    filteredRequests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    break;
+                case 'oldest':
+                    filteredRequests.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                    break;
+                case 'time':
+                    filteredRequests.sort((a, b) => new Date(a.expiresAt) - new Date(b.expiresAt));
+                    break;
+            }
+            
+            displayRequests();
+        }
+
+        // Helper functions
+        function getCampusName(campus) {
+            const campusNames = {
+                'ua-tuscaloosa': 'University of Alabama - Tuscaloosa',
+                'ua-birmingham': 'University of Alabama - Birmingham',
+                'ua-huntsville': 'University of Alabama - Huntsville',
+                'auburn': 'Auburn'
+            };
+            return campusNames[campus] || campus;
+        }
+
+        function formatTimeRemaining(expiresAt) {
+            const now = new Date();
+            const expires = new Date(expiresAt);
+            const diff = expires - now;
+            
+            if (diff <= 0) return 'Expired';
+            
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            
+            return `${minutes}:${seconds.toString().padStart(2, '0')} remaining`;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function contactUser(accountName) {
+            alert(`Contact information for ${accountName} would be displayed here. In a real application, this would show contact details or open a messaging system.`);
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            loadAllRequests();
+        }, 30000);
+    </script>
+</body>
+</html>

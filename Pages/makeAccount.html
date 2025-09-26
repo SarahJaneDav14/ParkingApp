@@ -22,13 +22,22 @@
             <div class="collapse navbar-collapse" id="Menu">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
+                        <a class="nav-link text-white" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-white" href="./parkingPal.html">Parking Pal</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="./spotSwap.html">Spot Swap</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="./makeAccount.html">Make an Account</a>
+                        <a class="nav-link text-white" href="./viewRequests.html">View Requests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./signIn.html">Sign In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="./makeAccount.html">Create Account</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="./meetTheTeam.html">Meet the Team</a>
@@ -56,12 +65,54 @@
                                 <div class="invalid-feedback" id="nameError"></div>
                             </div>
                             <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" placeholder="Create a secure password" required>
+                                <div class="invalid-feedback" id="passwordError"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                                <div class="invalid-feedback" id="confirmPasswordError"></div>
+                            </div>
+                            <div class="mb-3">
                                 <label for="carModel" class="form-label">Car Model</label>
                                 <input type="text" class="form-control" id="carModel" placeholder="e.g., Honda Civic, Toyota Camry" required>
                             </div>
                             <div class="mb-3">
                                 <label for="carColor" class="form-label">Car Color</label>
                                 <input type="text" class="form-control" id="carColor" placeholder="e.g., Black, White, Silver" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="campus" class="form-label">Campus</label>
+                                <select class="form-select" id="campus" required>
+                                    <option value="" selected disabled>Select your campus</option>
+                                    <option value="ua-tuscaloosa">University of Alabama - Tuscaloosa</option>
+                                    <option value="ua-birmingham">University of Alabama - Birmingham</option>
+                                    <option value="ua-huntsville">University of Alabama - Huntsville</option>
+                                    <option value="auburn">Auburn</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="userType" class="form-label">Are you a student or faculty/staff?</label>
+                                <select class="form-select" id="userType" required>
+                                    <option value="" selected disabled>Select your status</option>
+                                    <option value="student">Student</option>
+                                    <option value="faculty-staff">Faculty/Staff</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="studentTypeSection" style="display: none;">
+                                <label for="studentType" class="form-label">Are you a commuter or residential student?</label>
+                                <select class="form-select" id="studentType">
+                                    <option value="" selected disabled>Select your student type</option>
+                                    <option value="commuter">Commuter</option>
+                                    <option value="residential">Residential</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="parkingPassSection" style="display: none;">
+                                <label for="parkingPass" class="form-label">Which parking pass do you have?</label>
+                                <select class="form-select" id="parkingPass">
+                                    <option value="" selected disabled>Select your parking pass</option>
+                                </select>
                             </div>
                             <button type="submit" class="btn bg-mPurple text-white w-100">Create Account</button>
                         </form>
@@ -91,8 +142,14 @@
             e.preventDefault();
             
             const accountName = document.getElementById('accountName').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
             const carModel = document.getElementById('carModel').value.trim();
             const carColor = document.getElementById('carColor').value.trim();
+            const campus = document.getElementById('campus').value;
+            const userType = document.getElementById('userType').value;
+            const studentType = document.getElementById('studentType').value;
+            const parkingPass = document.getElementById('parkingPass').value;
             
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
@@ -102,9 +159,27 @@
             successMessage.style.display = 'none';
             errorMessage.style.display = 'none';
             
+            // Clear previous validation errors
+            document.getElementById('accountName').classList.remove('is-invalid');
+            document.getElementById('password').classList.remove('is-invalid');
+            document.getElementById('confirmPassword').classList.remove('is-invalid');
+            
             // Validate inputs
-            if (!accountName || !carModel || !carColor) {
-                errorText.textContent = 'Please fill in all fields.';
+            if (!accountName || !password || !confirmPassword || !carModel || !carColor || !campus || !userType) {
+                errorText.textContent = 'Please fill in all required fields.';
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            // Validate student-specific fields
+            if (userType === 'student' && campus !== 'auburn' && !studentType) {
+                errorText.textContent = 'Please select whether you are a commuter or residential student.';
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            if (!parkingPass) {
+                errorText.textContent = 'Please select your parking pass.';
                 errorMessage.style.display = 'block';
                 return;
             }
@@ -117,11 +192,32 @@
                 return;
             }
             
+            // Validate password length
+            if (password.length < 6) {
+                errorText.textContent = 'Password must be at least 6 characters long.';
+                errorMessage.style.display = 'block';
+                document.getElementById('password').classList.add('is-invalid');
+                return;
+            }
+            
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                errorText.textContent = 'Passwords do not match. Please try again.';
+                errorMessage.style.display = 'block';
+                document.getElementById('confirmPassword').classList.add('is-invalid');
+                return;
+            }
+            
             // Create account object
             const account = {
                 name: accountName,
+                password: password,
                 carModel: carModel,
                 carColor: carColor,
+                campus: campus,
+                userType: userType,
+                studentType: studentType || null,
+                parkingPass: parkingPass,
                 createdAt: new Date().toISOString()
             };
             
@@ -132,14 +228,13 @@
             
             // Show success message
             successMessage.style.display = 'block';
-            document.getElementById('accountName').classList.remove('is-invalid');
             
             // Reset form
             document.getElementById('registrationForm').reset();
             
-            // Redirect to spotSwap after 2 seconds
+            // Redirect to sign in page after 2 seconds
             setTimeout(() => {
-                window.location.href = './spotSwap.html';
+                window.location.href = './signIn.html';
             }, 2000);
         });
 
@@ -156,6 +251,180 @@
                 nameError.textContent = '';
             }
         });
+
+        // Real-time validation for password
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const passwordError = document.getElementById('passwordError');
+            
+            if (password && password.length < 6) {
+                this.classList.add('is-invalid');
+                passwordError.textContent = 'Password must be at least 6 characters long.';
+            } else {
+                this.classList.remove('is-invalid');
+                passwordError.textContent = '';
+            }
+            
+            // Also check confirm password if it has a value
+            const confirmPassword = document.getElementById('confirmPassword');
+            if (confirmPassword.value) {
+                confirmPassword.dispatchEvent(new Event('input'));
+            }
+        });
+
+        // Real-time validation for confirm password
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            
+            if (confirmPassword && password !== confirmPassword) {
+                this.classList.add('is-invalid');
+                confirmPasswordError.textContent = 'Passwords do not match.';
+            } else {
+                this.classList.remove('is-invalid');
+                confirmPasswordError.textContent = '';
+            }
+        });
+
+        // Handle user type change
+        document.getElementById('userType').addEventListener('change', function() {
+            const userType = this.value;
+            const campus = document.getElementById('campus').value;
+            const studentTypeSection = document.getElementById('studentTypeSection');
+            const parkingPassSection = document.getElementById('parkingPassSection');
+            
+            // Hide sections first
+            studentTypeSection.style.display = 'none';
+            parkingPassSection.style.display = 'none';
+            
+            // Reset selections
+            document.getElementById('studentType').selectedIndex = 0;
+            document.getElementById('parkingPass').selectedIndex = 0;
+            
+            if (userType === 'student' && campus && campus !== 'auburn') {
+                studentTypeSection.style.display = 'block';
+            } else if (userType && campus) {
+                updateParkingPassOptions(campus, userType, '');
+            }
+        });
+
+        // Handle campus change
+        document.getElementById('campus').addEventListener('change', function() {
+            const campus = this.value;
+            const userType = document.getElementById('userType').value;
+            const studentTypeSection = document.getElementById('studentTypeSection');
+            const parkingPassSection = document.getElementById('parkingPassSection');
+            
+            // Hide sections first
+            studentTypeSection.style.display = 'none';
+            parkingPassSection.style.display = 'none';
+            
+            // Reset selections
+            document.getElementById('studentType').selectedIndex = 0;
+            document.getElementById('parkingPass').selectedIndex = 0;
+            
+            if (userType === 'student' && campus && campus !== 'auburn') {
+                studentTypeSection.style.display = 'block';
+            } else if (userType && campus) {
+                updateParkingPassOptions(campus, userType, '');
+            }
+        });
+
+        // Handle student type change
+        document.getElementById('studentType').addEventListener('change', function() {
+            const campus = document.getElementById('campus').value;
+            const userType = document.getElementById('userType').value;
+            const studentType = this.value;
+            
+            if (campus && userType && studentType) {
+                updateParkingPassOptions(campus, userType, studentType);
+            }
+        });
+
+        // Function to update parking pass options
+        function updateParkingPassOptions(campus, userType, studentType) {
+            const parkingPassSection = document.getElementById('parkingPassSection');
+            const parkingPassSelect = document.getElementById('parkingPass');
+            
+            // Clear existing options
+            parkingPassSelect.innerHTML = '<option value="" selected disabled>Select your parking pass</option>';
+            
+            // Show parking pass section
+            parkingPassSection.style.display = 'block';
+            
+            // Add options based on campus, user type, and student type
+            if (campus === 'ua-birmingham') {
+                if (userType === 'student' && studentType === 'residential') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="FallSpring – Zone A or Zone H">Fall/Spring Zone A or Zone H</option>
+                        <option value="Fall (only) – Zone A or Zone H">Fall (only) Zone A or Zone H</option>
+                        <option value="FallSpring – Zone D9A">Fall/Spring Zone D9A</option>
+                        <option value="FallSpring – Zone B">Fall/Spring Zone B</option>
+                        <option value="Fall (only) – Zone B">Fall (only) Zone B</option>
+                        <option value="FallSpring – Zone D, E, F, G">Fall/Spring Zone D, E, F, G</option>
+                    `;
+                } else if (userType === 'student' && studentType === 'commuter') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="Fall (only) – Zone D, E, F, G">Fall (only) Zone D, E, F, G</option>
+                        <option value="FallSpring – Zone C">Fall/Spring Zone C</option>
+                        <option value="Fall (only) – Zone C">Fall (only) Zone C</option>
+                    `;
+                } else if (userType === 'faculty-staff') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="fs-parking">FS Parking</option>
+                    `;
+                }
+            } else if (campus === 'ua-tuscaloosa') {
+                if (userType === 'student' && studentType === 'residential') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="orange">Orange</option>
+                        <option value="silver">Silver</option>
+                        <option value="tan">Tan</option>
+                        <option value="yellow">Yellow</option>
+                    `;
+                } else if (userType === 'student' && studentType === 'commuter') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="east-commuter">East Commuter</option>
+                        <option value="west-commuter">West Commuter</option>
+                    `;
+                } else if (userType === 'faculty-staff') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="fs-parking">FS Parking</option>
+                    `;
+                }
+            } else if (campus === 'ua-huntsville') {
+                if (userType === 'student' && studentType === 'residential') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="residential">Residential</option>
+                    `;
+                } else if (userType === 'student' && studentType === 'commuter') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="commuter">Commuter</option>
+                    `;
+                } else if (userType === 'faculty-staff') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="faculty-staff">Faculty/Staff</option>
+                    `;
+                }
+            } else if (campus === 'auburn') {
+                if (userType === 'student') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="c-zone">C-zone</option>
+                        <option value="pc">PC</option>
+                        <option value="rd">RD</option>
+                        <option value="rh">RH</option>
+                        <option value="ro">RO</option>
+                        <option value="rw">RW</option>
+                    `;
+                } else if (userType === 'faculty-staff') {
+                    parkingPassSelect.innerHTML += `
+                        <option value="a-zone">A-zone</option>
+                        <option value="b-zone">B-zone</option>
+                    `;
+                }
+            }
+        }
     </script>
 </body>
 </html>

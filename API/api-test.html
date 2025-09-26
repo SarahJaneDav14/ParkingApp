@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Pal API Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .api-response {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+        .endpoint-card {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="mb-4">🚗 Parking Pal API Test Interface</h1>
+        
+        <!-- Health Check -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>Health Check</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary" onclick="testHealthCheck()">Test Health Check</button>
+                <div id="health-response" class="api-response" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Universities -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>Get Universities</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary" onclick="testUniversities()">Get All Universities</button>
+                <div id="universities-response" class="api-response" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Parking Information -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>Parking Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <select class="form-select" id="university-select">
+                            <option value="">Select University</option>
+                            <option value="ua-birmingham">UAB</option>
+                            <option value="ua-tuscaloosa">UA Tuscaloosa</option>
+                            <option value="ua-huntsville">UAH</option>
+                            <option value="auburn">Auburn</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" id="user-type-select">
+                            <option value="">Select User Type</option>
+                            <option value="residential">Residential</option>
+                            <option value="commuter">Commuter</option>
+                            <option value="faculty-staff">Faculty/Staff</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary" onclick="testParkingPasses()">Get Parking Passes</button>
+                    </div>
+                </div>
+                <div id="parking-response" class="api-response" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- User Management -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>User Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="user-name" placeholder="Name">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="email" class="form-control" id="user-email" placeholder="Email">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="car-model" placeholder="Car Model">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="car-color" placeholder="Car Color">
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="createUser()">Create User</button>
+                <button class="btn btn-info" onclick="getAllUsers()">Get All Users</button>
+                <div id="user-response" class="api-response" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Spot Swap -->
+        <div class="card endpoint-card">
+            <div class="card-header">
+                <h5>Spot Swap</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="spot-account" placeholder="Account Name">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="spot-campus">
+                            <option value="">Select Campus</option>
+                            <option value="ua-birmingham">UAB</option>
+                            <option value="ua-tuscaloosa">UA Tuscaloosa</option>
+                            <option value="ua-huntsville">UAH</option>
+                            <option value="auburn">Auburn</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="spot-location" placeholder="Location">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="spot-time">
+                            <option value="">Wait Time</option>
+                            <option value="1">1 minute</option>
+                            <option value="2">2 minutes</option>
+                            <option value="5">5 minutes</option>
+                            <option value="10">10 minutes</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <textarea class="form-control" id="spot-message" placeholder="Additional message" rows="2"></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-warning" onclick="postSpot()">Post Spot</button>
+                <button class="btn btn-info" onclick="getAllSpots()">Get All Spots</button>
+                <button class="btn btn-secondary" onclick="searchSpots()">Search Spots</button>
+                <div id="spot-response" class="api-response" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+
+        function showResponse(elementId, data) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function testHealthCheck() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                showResponse('health-response', data);
+            } catch (error) {
+                showResponse('health-response', { error: error.message });
+            }
+        }
+
+        async function testUniversities() {
+            try {
+                const response = await fetch(`${API_BASE}/universities`);
+                const data = await response.json();
+                showResponse('universities-response', data);
+            } catch (error) {
+                showResponse('universities-response', { error: error.message });
+            }
+        }
+
+        async function testParkingPasses() {
+            const university = document.getElementById('university-select').value;
+            const userType = document.getElementById('user-type-select').value;
+            
+            if (!university || !userType) {
+                alert('Please select both university and user type');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/parking/${university}/${userType}`);
+                const data = await response.json();
+                showResponse('parking-response', data);
+            } catch (error) {
+                showResponse('parking-response', { error: error.message });
+            }
+        }
+
+        async function createUser() {
+            const name = document.getElementById('user-name').value;
+            const email = document.getElementById('user-email').value;
+            const carModel = document.getElementById('car-model').value;
+            const carColor = document.getElementById('car-color').value;
+
+            if (!name || !email || !carModel || !carColor) {
+                alert('Please fill in all user fields');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, carModel, carColor })
+                });
+                const data = await response.json();
+                showResponse('user-response', data);
+            } catch (error) {
+                showResponse('user-response', { error: error.message });
+            }
+        }
+
+        async function getAllUsers() {
+            try {
+                const response = await fetch(`${API_BASE}/users`);
+                const data = await response.json();
+                showResponse('user-response', data);
+            } catch (error) {
+                showResponse('user-response', { error: error.message });
+            }
+        }
+
+        async function postSpot() {
+            const accountName = document.getElementById('spot-account').value;
+            const campus = document.getElementById('spot-campus').value;
+            const location = document.getElementById('spot-location').value;
+            const timeWait = document.getElementById('spot-time').value;
+            const message = document.getElementById('spot-message').value;
+
+            if (!accountName || !campus || !location || !timeWait) {
+                alert('Please fill in all required spot fields');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/spots`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ accountName, campus, location, timeWait, message })
+                });
+                const data = await response.json();
+                showResponse('spot-response', data);
+            } catch (error) {
+                showResponse('spot-response', { error: error.message });
+            }
+        }
+
+        async function getAllSpots() {
+            try {
+                const response = await fetch(`${API_BASE}/spots`);
+                const data = await response.json();
+                showResponse('spot-response', data);
+            } catch (error) {
+                showResponse('spot-response', { error: error.message });
+            }
+        }
+
+        async function searchSpots() {
+            const campus = document.getElementById('spot-campus').value;
+            const location = document.getElementById('spot-location').value;
+
+            if (!campus || !location) {
+                alert('Please select campus and enter location');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/spots/search?campus=${campus}&location=${encodeURIComponent(location)}`);
+                const data = await response.json();
+                showResponse('spot-response', data);
+            } catch (error) {
+                showResponse('spot-response', { error: error.message });
+            }
+        }
+    </script>
+</body>
+</html>
