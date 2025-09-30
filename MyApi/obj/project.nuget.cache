@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "fdPc/0kudDk=",
+  "success": true,
+  "projectFilePath": "/Users/cameronedger/Desktop/MIS321/ParkingApp/MyApi/MyApi.csproj",
+  "expectedPackageFiles": [
+    "/Users/cameronedger/.nuget/packages/microsoft.aspnetcore.openapi/9.0.1/microsoft.aspnetcore.openapi.9.0.1.nupkg.sha512",
+    "/Users/cameronedger/.nuget/packages/microsoft.data.sqlite.core/9.0.9/microsoft.data.sqlite.core.9.0.9.nupkg.sha512",
+    "/Users/cameronedger/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
+    "/Users/cameronedger/.nuget/packages/sqlitepclraw.core/2.1.10/sqlitepclraw.core.2.1.10.nupkg.sha512",
+    "/Users/cameronedger/.nuget/packages/system.memory/4.5.3/system.memory.4.5.3.nupkg.sha512"
+  ],
+  "logs": []
+}

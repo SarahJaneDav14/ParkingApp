@@ -289,7 +289,7 @@
                 // Pre-fill giving up a spot form
                 document.getElementById('givingCampus').value = currentUser.campus || '';
                 if (currentUser.campus) {
-                    updateGivingParkingLocations();
+                    updateParkingLocations();
                     document.getElementById('givingUserType').value = currentUser.userType || '';
                     if (currentUser.userType) {
                         updateGivingUserType();
@@ -551,6 +551,25 @@
                 alert('Please select your parking pass.');
                 return;
             }
+
+            // Persist the looking request so it appears on View Requests
+            const currentUser = JSON.parse(sessionStorage.getItem('currentUser') || 'null');
+            const requesterName = currentUser ? currentUser.name : 'Anonymous';
+            const lookingRequest = {
+                id: Date.now(),
+                type: 'looking',
+                accountName: requesterName,
+                campus: campus,
+                location: parkingPass,
+                message: message,
+                createdAt: new Date().toISOString(),
+                // Looking requests expire after 60 minutes by default
+                expiresAt: new Date(Date.now() + (60 * 60 * 1000)).toISOString()
+            };
+            const existingLooking = JSON.parse(localStorage.getItem('lookingRequests') || '[]');
+            existingLooking.push(lookingRequest);
+            localStorage.setItem('lookingRequests', JSON.stringify(existingLooking));
+            cleanupExpiredLookingRequests();
             
             // Look for matching spots using parking pass as location
             const match = findMatchingSpot(campus, parkingPass);
@@ -1289,6 +1308,13 @@
             const spots = JSON.parse(localStorage.getItem('availableSpots') || '[]');
             const activeSpots = spots.filter(spot => new Date(spot.expiresAt) > new Date());
             localStorage.setItem('availableSpots', JSON.stringify(activeSpots));
+        }
+
+        // Clean up expired looking requests
+        function cleanupExpiredLookingRequests() {
+            const requests = JSON.parse(localStorage.getItem('lookingRequests') || '[]');
+            const active = requests.filter(req => new Date(req.expiresAt) > new Date());
+            localStorage.setItem('lookingRequests', JSON.stringify(active));
         }
 
         // Countdown timer function

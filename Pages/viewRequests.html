@@ -129,19 +129,41 @@
             loadAllRequests();
         });
 
+        // Live refresh when localStorage changes in another tab
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'lookingRequests' || e.key === 'availableSpots') {
+                loadAllRequests();
+            }
+        });
+
         // Load requests from localStorage
         function loadAllRequests() {
+            cleanupExpired('availableSpots');
+            cleanupExpired('lookingRequests');
             const spots = JSON.parse(localStorage.getItem('availableSpots') || '[]');
-            const currentTime = new Date();
+            const looking = JSON.parse(localStorage.getItem('lookingRequests') || '[]');
+            const now = new Date();
             
-            // Filter out expired spots
-            allRequests = spots.filter(spot => new Date(spot.expiresAt) > currentTime);
+            // Normalize types: giving spots
+            const activeGiving = spots
+                .filter(spot => new Date(spot.expiresAt) > now)
+                .map(spot => ({ ...spot, type: 'giving' }));
             
-            // Add looking requests (these would need to be stored separately in a real app)
-            // For now, we'll just show the giving up spots
+            // Active looking requests
+            const activeLooking = looking.filter(req => new Date(req.expiresAt) > now);
+            
+            allRequests = [...activeGiving, ...activeLooking];
             filteredRequests = [...allRequests];
             
             displayRequests();
+        }
+
+        // Remove expired entries and persist cleanup
+        function cleanupExpired(key) {
+            const raw = JSON.parse(localStorage.getItem(key) || '[]');
+            if (!Array.isArray(raw)) return;
+            const active = raw.filter(item => new Date(item.expiresAt) > new Date());
+            localStorage.setItem(key, JSON.stringify(active));
         }
 
         // Display requests
@@ -161,34 +183,47 @@
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card h-100 shadow-sm">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <span class="badge bg-success">Available</span>
+                            ${spot.type === 'giving' ? '<span class="badge bg-success">Available</span>' : '<span class="badge bg-info">Looking</span>'}
                             <small class="text-muted">${formatTimeRemaining(spot.expiresAt)}</small>
                         </div>
                         <div class="card-body">
                             <h6 class="card-title">${getCampusName(spot.campus)}</h6>
-                            <p class="card-text">
-                                <strong>Location:</strong> ${spot.location}<br>
-                                <strong>Posted by:</strong> ${spot.accountName}<br>
-                                <strong>Wait Time:</strong> ${spot.timeWait} minutes
-                            </p>
-                            <div class="mb-3">
-                                <h6>Vehicle Details:</h6>
-                                <ul class="list-unstyled small">
-                                    <li><strong>Year:</strong> ${spot.carYear || 'N/A'}</li>
-                                    <li><strong>Make:</strong> ${spot.carMake || 'N/A'}</li>
-                                    <li><strong>Model:</strong> ${spot.carModel || 'N/A'}</li>
-                                    <li><strong>Color:</strong> ${spot.carColor || 'N/A'}</li>
-                                    <li><strong>Floor:</strong> ${spot.floor || 'N/A'}</li>
-                                </ul>
-                            </div>
+                            ${spot.type === 'giving' ? `
+                                <p class="card-text">
+                                    <strong>Location:</strong> ${spot.location}<br>
+                                    <strong>Posted by:</strong> ${spot.accountName}<br>
+                                    <strong>Wait Time:</strong> ${spot.timeWait} minutes
+                                </p>
+                                <div class="mb-3">
+                                    <h6>Vehicle Details:</h6>
+                                    <ul class="list-unstyled small">
+                                        <li><strong>Year:</strong> ${spot.carYear || 'N/A'}</li>
+                                        <li><strong>Make:</strong> ${spot.carMake || 'N/A'}</li>
+                                        <li><strong>Model:</strong> ${spot.carModel || 'N/A'}</li>
+                                        <li><strong>Color:</strong> ${spot.carColor || 'N/A'}</li>
+                                        <li><strong>Floor:</strong> ${spot.floor || 'N/A'}</li>
+                                    </ul>
+                                </div>
+                            ` : `
+                                <p class="card-text">
+                                    <strong>Looking for:</strong> ${spot.location}<br>
+                                    <strong>Requester:</strong> ${spot.accountName}
+                                </p>
+                            `}
                             ${spot.message ? `<p class="card-text"><strong>Additional Info:</strong> ${spot.message}</p>` : ''}
                         </div>
                         <div class="card-footer">
                             <div class="d-flex justify-content-between align-items-center">
                                 <small class="text-muted">Posted ${formatDate(spot.createdAt)}</small>
-                                <button class="btn btn-sm btn-primary" onclick="contactUser('${spot.accountName}')">
-                                    <i class="fas fa-comment me-1"></i>Contact
-                                </button>
+                                ${spot.type === 'giving' ? `
+                                    <button class="btn btn-sm btn-primary" onclick="contactUser('${spot.accountName}')">
+                                        <i class="fas fa-comment me-1"></i>Contact
+                                    </button>
+                                ` : `
+                                    <button class="btn btn-sm btn-outline-primary" onclick="contactUser('${spot.accountName}')">
+                                        <i class="fas fa-handshake me-1"></i>Offer Spot
+                                    </button>
+                                `}
                             </div>
                         </div>
                     </div>
@@ -204,8 +239,7 @@
             
             filteredRequests = allRequests.filter(spot => {
                 if (campusFilter && spot.campus !== campusFilter) return false;
-                // For now, we only have "giving" type spots
-                if (typeFilter && typeFilter !== 'giving') return false;
+                if (typeFilter && spot.type !== typeFilter) return false;
                 return true;
             });
             
