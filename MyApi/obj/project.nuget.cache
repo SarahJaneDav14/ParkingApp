@@ -1,14 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "fdPc/0kudDk=",
+  "dgSpecHash": "ZbARxZ4QSsc=",
   "success": true,
-  "projectFilePath": "/Users/cameronedger/Desktop/MIS321/ParkingApp/MyApi/MyApi.csproj",
+  "projectFilePath": "C:\\Users\\tynas\\Documents\\MIS321\\GP\\GP#1\\ParkingApp\\MyApi\\MyApi.csproj",
   "expectedPackageFiles": [
-    "/Users/cameronedger/.nuget/packages/microsoft.aspnetcore.openapi/9.0.1/microsoft.aspnetcore.openapi.9.0.1.nupkg.sha512",
-    "/Users/cameronedger/.nuget/packages/microsoft.data.sqlite.core/9.0.9/microsoft.data.sqlite.core.9.0.9.nupkg.sha512",
-    "/Users/cameronedger/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512",
-    "/Users/cameronedger/.nuget/packages/sqlitepclraw.core/2.1.10/sqlitepclraw.core.2.1.10.nupkg.sha512",
-    "/Users/cameronedger/.nuget/packages/system.memory/4.5.3/system.memory.4.5.3.nupkg.sha512"
+    "C:\\Users\\tynas\\.nuget\\packages\\microsoft.data.sqlite.core\\8.0.0\\microsoft.data.sqlite.core.8.0.0.nupkg.sha512",
+    "C:\\Users\\tynas\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\tynas\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\tynas\\.nuget\\packages\\sqlitepclraw.core\\2.1.6\\sqlitepclraw.core.2.1.6.nupkg.sha512",
+    "C:\\Users\\tynas\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "C:\\Users\\tynas\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "C:\\Users\\tynas\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "C:\\Users\\tynas\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",
+    "C:\\Users\\tynas\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
   ],
   "logs": []
 }
